@@ -60,7 +60,7 @@ function Navigator() {
         <Stack.Protected guard={!user}>
           <Stack.Screen name="sign-in" options={{ headerShown: false }} />
           <Stack.Screen name="register" options={{ title: '' }} />
-          <Stack.Screen name="forgot-password" options={{ title: 'Reset password' }} />
+          <Stack.Screen name="forgot-password" options={{ title: '' }} />
         </Stack.Protected>
 
         <Stack.Protected guard={signedIn && !onboarded}>

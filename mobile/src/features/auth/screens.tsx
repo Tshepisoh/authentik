@@ -1,7 +1,7 @@
 import { useRef, useState, type ComponentRef } from 'react';
 import { TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
-import { Button, Icon, IconButton, Notice, Screen, Text, TextField } from '@/shared/ui';
+import { Button, FactRow, Icon, IconButton, Notice, Screen, Text, TextField } from '@/shared/ui';
 import { useTheme } from '@/shared/ui/theme';
 import { config } from '@/shared/config';
 import { authErrorMessage, identity } from './identity';
@@ -246,16 +246,20 @@ export function RegisterScreen() {
 }
 
 export function ForgotPasswordScreen() {
+  const t = useTheme();
+  const c = t.colors;
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [sent, setSent] = useState(false);
   const [busy, setBusy] = useState(false);
+  const [fieldError, setFieldError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const submit = async () => {
-    if (!EMAIL_RE.test(email.trim())) return setError('Enter a valid email address.');
-    setBusy(true);
     setError(null);
+    if (!EMAIL_RE.test(email.trim())) return setFieldError('Enter a valid email address.');
+    setFieldError(null);
+    setBusy(true);
     try {
       await identity.sendPasswordReset(email);
     } catch (e) {
@@ -270,21 +274,56 @@ export function ForgotPasswordScreen() {
     setSent(true);
   };
 
+  if (sent) {
+    return (
+      <Screen>
+        <View style={{ gap: t.space.lg, paddingTop: t.space.lg }}>
+          <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: c.primaryContainer, alignItems: 'center', justifyContent: 'center' }}>
+            <Icon name="mark-email-read" size={32} color={c.onPrimaryContainer} />
+          </View>
+          <View style={{ gap: t.space.sm }}>
+            <Text variant="headlineSmall">Check your email</Text>
+            {/* Worded the same whether or not the account exists, so the screen can't be used to test addresses. */}
+            <Text variant="bodyLarge" muted>If there’s an Authentik account for {email.trim()}, we’ve sent it a link to choose a new password.</Text>
+          </View>
+        </View>
+        <View style={{ gap: t.space.md }}>
+          <FactRow icon="schedule" title="It can take a few minutes" body="Check your spam or junk folder if it hasn’t arrived." />
+          <FactRow icon="open-in-browser" title="The link opens in your browser" body="Set your new password there, then come back and sign in." />
+        </View>
+        <View style={{ gap: t.space.sm }}>
+          <Button title="Back to sign in" onPress={() => router.back()} />
+          <Button kind="ghost" title="Use a different email" onPress={() => setSent(false)} />
+        </View>
+      </Screen>
+    );
+  }
+
   return (
     <Screen>
-      {sent ? (
-        <>
-          <Notice tone="ok" title="Check your email">If an account exists for that address, we’ve sent a link to reset the password.</Notice>
-          <Button title="Back to sign in" kind="secondary" onPress={() => router.back()} />
-        </>
-      ) : (
-        <>
-          <Text muted>Enter your account email and we’ll send you a reset link.</Text>
-          <TextField label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" keyboardType="email-address" autoComplete="email" />
-          {error ? <Notice tone="danger">{error}</Notice> : null}
+      <View style={{ gap: t.space.sm }}>
+        <Text variant="headlineSmall">Reset your password</Text>
+        <Text variant="bodyLarge" muted>Enter the email you signed up with. We’ll send you a link to choose a new password.</Text>
+      </View>
+      <View style={{ gap: t.space.lg }}>
+        <TextField
+          label="Email"
+          value={email}
+          onChangeText={(v) => { setEmail(v); if (fieldError) setFieldError(null); }}
+          error={fieldError}
+          autoCapitalize="none"
+          keyboardType="email-address"
+          autoComplete="email"
+          textContentType="emailAddress"
+          returnKeyType="send"
+          onSubmitEditing={submit}
+        />
+        {error ? <Notice tone="danger">{error}</Notice> : null}
+        <View style={{ gap: t.space.sm }}>
           <Button title="Send reset link" onPress={submit} loading={busy} />
-        </>
-      )}
+          <Button kind="ghost" title="Back to sign in" onPress={() => router.back()} />
+        </View>
+      </View>
     </Screen>
   );
 }
