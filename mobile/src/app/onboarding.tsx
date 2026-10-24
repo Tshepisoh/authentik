@@ -14,7 +14,7 @@ export default function Onboarding() {
   const { user, completeOnboarding, refreshProfile } = useAuth();
   const protection = useProtection();
   // The notification step only appears where Android lets it work.
-  const steps: Step[] = protection.state === 'unsupported' || protection.state === 'not_in_build' ?['intro', 'honesty'] : ['intro', 'notifications', 'honesty'];
+  const steps: Step[] = protection.state === 'unsupported' || protection.state === 'not_in_build' ? ['intro', 'honesty'] : ['intro', 'notifications', 'honesty'];
   const [index, setIndex] = useState(0);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);

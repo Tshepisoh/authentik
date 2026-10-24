@@ -1,7 +1,7 @@
 import { useRef, useState, type ComponentRef } from 'react';
 import { TextInput, View } from 'react-native';
-import { Link, useRouter } from 'expo-router';
-import { Button, Notice, Screen, Text, TextField } from '@/shared/ui';
+import { useRouter } from 'expo-router';
+import { Button, Icon, IconButton, Notice, Screen, Text, TextField } from '@/shared/ui';
 import { useTheme } from '@/shared/ui/theme';
 import { config } from '@/shared/config';
 import { authErrorMessage, identity } from './identity';
@@ -10,17 +10,26 @@ const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export function SignInScreen() {
   const t = useTheme();
+  const c = t.colors;
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  // Field problems sit under the field; sign-in failures (wrong password, offline) above the button.
+  const [fieldError, setFieldError] = useState<{ email?: string; password?: string }>({});
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
   const passwordRef = useRef<ComponentRef<typeof TextInput>>(null);
 
   const submit = async () => {
-    if (!EMAIL_RE.test(email.trim())) return setError('Enter a valid email address.');
-    if (config.authMode !== 'dev' && !password) return setError('Enter your password.');
-    setBusy(true);
+    const problems = {
+      email: EMAIL_RE.test(email.trim()) ? undefined : 'Enter a valid email address.',
+      password: config.authMode !== 'dev' && !password ? 'Enter your password.' : undefined,
+    };
+    setFieldError(problems);
     setError(null);
+    if (problems.email || problems.password) return;
+    setBusy(true);
     try {
       await identity.signIn(email, password);
     } catch (e) {
@@ -31,21 +40,71 @@ export function SignInScreen() {
   };
 
   return (
-    <Screen edges={['top', 'bottom']}>
-      <View style={{ gap: t.space.sm, marginTop: t.space.xxl }}>
-        <Text variant="title">Authentik</Text>
-        <Text muted>Check websites, look at suspicious links safely, and catch payment tricks before you pay.</Text>
+    <Screen edges={['top', 'bottom']} fill>
+      <View style={{ gap: t.space.lg, paddingTop: t.space.xxl }}>
+        <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: c.primaryContainer, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="verified-user" size={32} color={c.onPrimaryContainer} />
+        </View>
+        <View style={{ gap: t.space.sm }}>
+          <Text variant="headlineMedium">Authentik</Text>
+          <Text variant="bodyLarge" muted>Check payments, messages and links before you trust them.</Text>
+        </View>
       </View>
+
       {config.authMode === 'dev' ? (
         <Notice tone="warning" title="Development sign-in">Any email works and no password is checked. This only works against a development server.</Notice>
       ) : null}
-      <TextField label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" autoComplete="email" keyboardType="email-address" textContentType="emailAddress" returnKeyType="next" onSubmitEditing={() => passwordRef.current?.focus()} />
-      <TextField ref={passwordRef} label="Password" value={password} onChangeText={setPassword} secureTextEntry autoComplete="current-password" textContentType="password" returnKeyType="go" onSubmitEditing={submit} />
-      {error ? <Notice tone="danger">{error}</Notice> : null}
-      <Button title="Sign in" onPress={submit} loading={busy} />
-      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-        <Link href="/forgot-password"><Text color={t.colors.primary}>Forgot password?</Text></Link>
-        <Link href="/register"><Text color={t.colors.primary}>Create account</Text></Link>
+
+      <View style={{ gap: t.space.lg }}>
+        <TextField
+          label="Email"
+          value={email}
+          onChangeText={(v) => { setEmail(v); if (fieldError.email) setFieldError({ ...fieldError, email: undefined }); }}
+          error={fieldError.email}
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+        />
+        <View style={{ gap: t.space.xs }}>
+          <TextField
+            ref={passwordRef}
+            label="Password"
+            value={password}
+            onChangeText={(v) => { setPassword(v); if (fieldError.password) setFieldError({ ...fieldError, password: undefined }); }}
+            error={fieldError.password}
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoComplete="current-password"
+            textContentType="password"
+            returnKeyType="go"
+            onSubmitEditing={submit}
+            trailing={
+              <IconButton
+                name={showPassword ? 'visibility-off' : 'visibility'}
+                label={showPassword ? 'Hide password' : 'Show password'}
+                onPress={() => setShowPassword(!showPassword)}
+                color={c.onSurfaceVariant}
+              />
+            }
+          />
+          <Button kind="ghost" title="Forgot password?" onPress={() => router.push('/forgot-password')} style={{ alignSelf: 'flex-end', paddingHorizontal: 12 }} />
+        </View>
+
+        {error ? <Notice tone="danger">{error}</Notice> : null}
+
+        <View style={{ gap: t.space.sm }}>
+          <Button title="Sign in" onPress={submit} loading={busy} />
+          <Button kind="secondary" title="Create an account" onPress={() => router.push('/register')} />
+        </View>
+      </View>
+
+      <View style={{ flex: 1 }} />
+      <View style={{ flexDirection: 'row', gap: t.space.sm, alignItems: 'flex-start' }}>
+        <Icon name="lock-outline" size={18} color={c.onSurfaceVariant} />
+        <Text variant="bodySmall" muted style={{ flex: 1 }}>Your password is handled by our sign-in provider. Authentik never sees it.</Text>
       </View>
     </Screen>
   );

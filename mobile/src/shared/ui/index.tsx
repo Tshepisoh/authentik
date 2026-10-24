@@ -46,10 +46,12 @@ export function Text({ variant = 'body', muted, color, style, ...rest }: TextPro
   );
 }
 
-export function Screen({ children, scroll = true, padded = true, edges = ['bottom'], refreshControl }: {
+export function Screen({ children, scroll = true, padded = true, fill, edges = ['bottom'], refreshControl }: {
   children: ReactNode;
   scroll?: boolean;
   padded?: boolean;
+  /** Content stretches to the screen height, so a footer can sit at the bottom. */
+  fill?: boolean;
   edges?: ('top' | 'bottom')[];
   refreshControl?: ComponentProps<typeof ScrollView>['refreshControl'];
 }) {
@@ -58,7 +60,7 @@ export function Screen({ children, scroll = true, padded = true, edges = ['botto
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: t.colors.surface }} edges={edges}>
       {scroll ? (
-        <ScrollView contentContainerStyle={[content, { paddingBottom: t.space.xxl }]} keyboardShouldPersistTaps="handled" refreshControl={refreshControl}>
+        <ScrollView contentContainerStyle={[content, { paddingBottom: t.space.xxl }, fill && { flexGrow: 1 }]} keyboardShouldPersistTaps="handled" refreshControl={refreshControl}>
           {children}
         </ScrollView>
       ) : (
