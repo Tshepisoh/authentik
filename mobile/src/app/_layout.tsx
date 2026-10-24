@@ -59,8 +59,8 @@ function Navigator() {
       >
         <Stack.Protected guard={!user}>
           <Stack.Screen name="sign-in" options={{ headerShown: false }} />
-          <Stack.Screen name="register" options={{ title: '' }} />
-          <Stack.Screen name="forgot-password" options={{ title: '' }} />
+          <Stack.Screen name="register" options={{ title: '', headerStyle: { backgroundColor: t.colors.authSurface }, headerTintColor: t.colors.authOnSurface }} />
+          <Stack.Screen name="forgot-password" options={{ title: '', headerStyle: { backgroundColor: t.colors.authSurface }, headerTintColor: t.colors.authOnSurface }} />
         </Stack.Protected>
 
         <Stack.Protected guard={signedIn && !onboarded}>

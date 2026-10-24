@@ -1,0 +1,20 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-24T22:10:00Z" },
+  "title": "Authentik sign-in options",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 390, "h": 844, "title": "1 · Calm and clear" },
+    "Hero.dc.html": { "x": 470, "y": 0, "w": 390, "h": 844, "title": "2 · Blue hero, form sheet" },
+    "Explain.dc.html": { "x": 940, "y": 0, "w": 390, "h": 844, "title": "3 · Show what it does" },
+    "Night.dc.html": { "x": 1410, "y": 0, "w": 390, "h": 844, "title": "4 · Night guardian" },
+    "NightLight.dc.html": { "x": 1410, "y": 964, "w": 390, "h": 844, "title": "4 · Night guardian, light mode" },
+    "Steps.dc.html": { "x": 1880, "y": 0, "w": 390, "h": 844, "title": "5 · Email first, one step at a time", "is_interactive": true }
+  },
+  "order": ["Main.dc.html", "Hero.dc.html", "Explain.dc.html", "Night.dc.html", "NightLight.dc.html", "Steps.dc.html"],
+  "notes": {
+    "heading": { "x": 0, "y": -300, "text": "Authentik sign-in options", "kind": "title1", "maxW": 2270 }
+  },
+  "designSystems": []
+}

@@ -7,8 +7,10 @@ import { config } from '@/shared/config';
 import { authErrorMessage, identity } from './identity';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-// The app icon (A-check monogram), rendered by mobile/.impeccable/logos/render-icons.mjs.
-const BRAND_ICON = require('../../../assets/brand-icon.png');
+// The A-check mark and the "Authentik" wordmark, white on transparent and tinted per theme.
+// Rendered by mobile/.impeccable/logos/render-icons.mjs.
+const BRAND_MARK = require('../../../assets/brand-mark.png');
+const WORDMARK = require('../../../assets/wordmark.png');
 
 export function SignInScreen() {
   const t = useTheme();
@@ -42,13 +44,13 @@ export function SignInScreen() {
   };
 
   return (
-    <Screen edges={['top', 'bottom']} fill>
-      <View style={{ gap: t.space.lg, paddingTop: t.space.xxl }}>
-        <Image source={BRAND_ICON} style={{ width: 64, height: 64, borderRadius: 16 }} accessibilityIgnoresInvertColors accessible={false} />
-        <View style={{ gap: t.space.sm }}>
-          <Text variant="headlineMedium">Authentik</Text>
-          <Text variant="bodyLarge" muted>Check payments, messages and links before you trust them.</Text>
+    <Screen edges={['top', 'bottom']} fill background={c.authSurface}>
+      <View style={{ alignItems: 'center', gap: t.space.lg, paddingTop: 56 }}>
+        <Image source={BRAND_MARK} style={{ width: 72, height: 72, tintColor: c.authMark }} accessible={false} />
+        <View accessible accessibilityRole="header" accessibilityLabel="Authentik">
+          <Image source={WORDMARK} style={{ width: 144, height: 36, tintColor: c.authOnSurface }} />
         </View>
+        <Text variant="bodyLarge" color={c.authMuted} style={{ textAlign: 'center', maxWidth: 280 }}>Check payments, messages and links before you trust them.</Text>
       </View>
 
       {config.authMode === 'dev' ? (
@@ -61,6 +63,8 @@ export function SignInScreen() {
           value={email}
           onChangeText={(v) => { setEmail(v); if (fieldError.email) setFieldError({ ...fieldError, email: undefined }); }}
           error={fieldError.email}
+          fill={c.authField}
+          outline={c.authFieldOutline}
           autoCapitalize="none"
           autoComplete="email"
           keyboardType="email-address"
@@ -75,6 +79,8 @@ export function SignInScreen() {
             value={password}
             onChangeText={(v) => { setPassword(v); if (fieldError.password) setFieldError({ ...fieldError, password: undefined }); }}
             error={fieldError.password}
+            fill={c.authField}
+            outline={c.authFieldOutline}
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="current-password"
@@ -102,9 +108,9 @@ export function SignInScreen() {
       </View>
 
       <View style={{ flex: 1 }} />
-      <View style={{ flexDirection: 'row', gap: t.space.sm, alignItems: 'flex-start' }}>
-        <Icon name="lock-outline" size={18} color={c.onSurfaceVariant} />
-        <Text variant="bodySmall" muted style={{ flex: 1 }}>Your password is handled by our sign-in provider. Authentik never sees it.</Text>
+      <View style={{ flexDirection: 'row', gap: t.space.sm, alignItems: 'center', justifyContent: 'center' }}>
+        <Icon name="lock-outline" size={16} color={c.authMuted} />
+        <Text variant="bodySmall" color={c.authMuted}>Authentik never sees your password.</Text>
       </View>
     </Screen>
   );
@@ -163,7 +169,7 @@ export function RegisterScreen() {
   };
 
   return (
-    <Screen fill>
+    <Screen fill background={c.authSurface}>
       <View style={{ gap: t.space.sm }}>
         <Text variant="headlineSmall">Create your account</Text>
         <Text variant="bodyLarge" muted>An email address and a password are all we need.</Text>
@@ -175,6 +181,8 @@ export function RegisterScreen() {
           value={email}
           onChangeText={(v) => { setEmail(v); clear('email'); }}
           error={fieldError.email}
+          fill={c.authField}
+          outline={c.authFieldOutline}
           hint="We’ll send a link to confirm it, so you can recover your account."
           autoCapitalize="none"
           autoComplete="email"
@@ -191,6 +199,8 @@ export function RegisterScreen() {
             value={password}
             onChangeText={(v) => { setPassword(v); clear('password'); }}
             error={fieldError.password}
+            fill={c.authField}
+            outline={c.authFieldOutline}
             secureTextEntry={!showPassword}
             autoCapitalize="none"
             autoComplete="new-password"
@@ -220,6 +230,8 @@ export function RegisterScreen() {
           value={confirm}
           onChangeText={(v) => { setConfirm(v); clear('confirm'); }}
           error={fieldError.confirm}
+          fill={c.authField}
+          outline={c.authFieldOutline}
           secureTextEntry={!showPassword}
           autoCapitalize="none"
           autoComplete="new-password"
@@ -238,8 +250,8 @@ export function RegisterScreen() {
 
       <View style={{ flex: 1 }} />
       <View style={{ flexDirection: 'row', gap: t.space.sm, alignItems: 'flex-start' }}>
-        <Icon name="lock-outline" size={18} color={c.onSurfaceVariant} />
-        <Text variant="bodySmall" muted style={{ flex: 1 }}>Your password is handled by our sign-in provider. Authentik never sees it.</Text>
+        <Icon name="lock-outline" size={18} color={c.authMuted} />
+        <Text variant="bodySmall" color={c.authMuted} style={{ flex: 1 }}>Your password is handled by our sign-in provider. Authentik never sees it.</Text>
       </View>
     </Screen>
   );
@@ -276,7 +288,7 @@ export function ForgotPasswordScreen() {
 
   if (sent) {
     return (
-      <Screen>
+      <Screen background={c.authSurface}>
         <View style={{ gap: t.space.lg, paddingTop: t.space.lg }}>
           <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: c.primaryContainer, alignItems: 'center', justifyContent: 'center' }}>
             <Icon name="mark-email-read" size={32} color={c.onPrimaryContainer} />
@@ -300,7 +312,7 @@ export function ForgotPasswordScreen() {
   }
 
   return (
-    <Screen>
+    <Screen background={c.authSurface}>
       <View style={{ gap: t.space.sm }}>
         <Text variant="headlineSmall">Reset your password</Text>
         <Text variant="bodyLarge" muted>Enter the email you signed up with. We’ll send you a link to choose a new password.</Text>
@@ -311,6 +323,8 @@ export function ForgotPasswordScreen() {
           value={email}
           onChangeText={(v) => { setEmail(v); if (fieldError) setFieldError(null); }}
           error={fieldError}
+          fill={c.authField}
+          outline={c.authFieldOutline}
           autoCapitalize="none"
           keyboardType="email-address"
           autoComplete="email"

@@ -46,19 +46,21 @@ export function Text({ variant = 'body', muted, color, style, ...rest }: TextPro
   );
 }
 
-export function Screen({ children, scroll = true, padded = true, fill, edges = ['bottom'], refreshControl }: {
+export function Screen({ children, scroll = true, padded = true, fill, background, edges = ['bottom'], refreshControl }: {
   children: ReactNode;
   scroll?: boolean;
   padded?: boolean;
   /** Content stretches to the screen height, so a footer can sit at the bottom. */
   fill?: boolean;
+  /** Overrides the surface colour (the sign-in screens use `authSurface`). */
+  background?: string;
   edges?: ('top' | 'bottom')[];
   refreshControl?: ComponentProps<typeof ScrollView>['refreshControl'];
 }) {
   const t = useTheme();
   const content = padded ? { paddingHorizontal: t.space.lg, paddingTop: t.space.sm, gap: t.space.xl } : undefined;
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: t.colors.surface }} edges={edges}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: background ?? t.colors.surface }} edges={edges}>
       {scroll ? (
         <ScrollView contentContainerStyle={[content, { paddingBottom: t.space.xxl }, fill && { flexGrow: 1 }]} keyboardShouldPersistTaps="handled" refreshControl={refreshControl}>
           {children}
@@ -149,14 +151,14 @@ export function ExtendedFab({ icon, label, onPress, style }: { icon: IconName; l
 }
 
 /** M3 outlined text field. `trailing` holds a clear or paste button. */
-export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextInputProps & { label: string; error?: string | null; hint?: string; trailing?: ReactNode }>(
-  function TextField({ label, error, hint, style, trailing, ...rest }, ref) {
+export const TextField = forwardRef<ComponentRef<typeof TextInput>, TextInputProps & { label: string; error?: string | null; hint?: string; trailing?: ReactNode; fill?: string; outline?: string }>(
+  function TextField({ label, error, hint, style, trailing, fill, outline, ...rest }, ref) {
     const t = useTheme();
     const c = t.colors;
     return (
       <View style={{ gap: t.space.xs }}>
         <Text variant="labelLarge" muted style={{ paddingLeft: 4 }}>{label}</Text>
-        <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: 56, borderWidth: error ? 2 : 1, borderColor: error ? c.danger : c.outline, borderRadius: t.radius.md, paddingLeft: 16, paddingRight: trailing ? 4 : 16 }}>
+        <View style={{ flexDirection: 'row', alignItems: 'center', minHeight: 56, borderWidth: error ? 2 : 1, borderColor: error ? c.danger : outline ?? c.outline, backgroundColor: fill, borderRadius: t.radius.md, paddingLeft: 16, paddingRight: trailing ? 4 : 16 }}>
           <TextInput
             ref={ref}
             placeholderTextColor={c.onSurfaceVariant}

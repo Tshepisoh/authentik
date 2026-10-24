@@ -27,6 +27,13 @@ const light = {
   outline: '#777680',
   outlineVariant: '#C7C5D0',
   scrim: 'rgba(0, 0, 0, 0.32)',
+  // Sign-in, register and reset screens ("night guardian"): cool pale blue by day, navy at night.
+  authSurface: '#F3F5FC',
+  authField: '#FFFFFF',
+  authFieldOutline: '#777680',
+  authOnSurface: '#0B1220',
+  authMuted: '#46464F',
+  authMark: '#3451C7',
 
   danger: '#BA1A1A',
   dangerContainer: '#FFDAD6',
@@ -63,6 +70,12 @@ const dark: typeof light = {
   outline: '#918F9A',
   outlineVariant: '#46464F',
   scrim: 'rgba(0, 0, 0, 0.5)',
+  authSurface: '#0B1220',
+  authField: '#141C2E',
+  authFieldOutline: '#4A5573',
+  authOnSurface: '#FFFFFF',
+  authMuted: '#AEB6CC',
+  authMark: '#FFFFFF',
 
   danger: '#FFB4AB',
   dangerContainer: '#93000A',

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Sign in: night guardian, light mode</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&amp;family=Schibsted+Grotesk:wght@700&amp;display=swap">
+<style>
+body{margin:0}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; padding: 88px 24px 32px; display: flex; flex-direction: column; gap: 40px; background: #F3F5FC; font-family: Roboto, system-ui, sans-serif; color: #1B1B21">
+
+  <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; text-align: center">
+    <svg width="72" height="72" viewBox="0 0 64 64" aria-hidden="true"><g transform="translate(-1.5 0)" fill="none" stroke="#3451C7" stroke-width="6.5" stroke-linecap="round" stroke-linejoin="round"><path d="M13 55 L32 9 L51 55"></path><path d="M20 38 L27 47 L54 20"></path></g></svg>
+    <h1 style="margin: 0; font-family: 'Schibsted Grotesk', sans-serif; font-weight: 700; font-size: 30px; letter-spacing: -0.01em; color: #0B1220">Authentik</h1>
+    <p style="margin: 0; max-width: 280px; font-size: 16px; line-height: 24px; color: #46464F">Check payments, messages and links before you trust them.</p>
+  </div>
+
+  <form style="display: flex; flex-direction: column; gap: 16px; margin: 0">
+    <label style="display: flex; flex-direction: column; gap: 6px">
+      <span style="font-size: 14px; font-weight: 500; color: #46464F; padding-left: 4px">Email</span>
+      <input type="email" autocomplete="email" style="height: 56px; box-sizing: border-box; border: 1px solid #777680; border-radius: 12px; padding: 0 16px; font: 16px Roboto, sans-serif; color: #1B1B21; background: #FFFFFF">
+    </label>
+    <div style="display: flex; flex-direction: column; gap: 6px">
+      <label for="pw4l" style="font-size: 14px; font-weight: 500; color: #46464F; padding-left: 4px">Password</label>
+      <div style="height: 56px; box-sizing: border-box; border: 1px solid #777680; border-radius: 12px; background: #FFFFFF; display: flex; align-items: center; padding: 0 4px 0 16px">
+        <input id="pw4l" type="password" autocomplete="current-password" style="flex: 1; min-width: 0; border: 0; outline: none; font: 16px Roboto, sans-serif; color: #1B1B21; background: transparent">
+        <button type="button" aria-label="Show password" style="width: 48px; height: 48px; border: 0; border-radius: 24px; background: transparent; display: flex; align-items: center; justify-content: center; cursor: pointer">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#46464F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        </button>
+      </div>
+    </div>
+    <a href="#" style="align-self: flex-end; font-size: 14px; font-weight: 500; color: #3451C7; text-decoration: none; padding: 12px 8px; margin: -8px 0">Forgot password?</a>
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px">
+      <button type="submit" style="height: 48px; border: 0; border-radius: 24px; background: #3451C7; color: #FFFFFF; font: 500 14px Roboto, sans-serif; letter-spacing: 0.1px; cursor: pointer">Sign in</button>
+      <button type="button" style="height: 48px; border: 1px solid #777680; border-radius: 24px; background: transparent; color: #3451C7; font: 500 14px Roboto, sans-serif; letter-spacing: 0.1px; cursor: pointer">Create an account</button>
+    </div>
+  </form>
+
+  <div style="flex: 1"></div>
+  <div style="display: flex; gap: 8px; align-items: flex-start; justify-content: center">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#46464F" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>
+    <p style="margin: 0; font-size: 12px; line-height: 16px; color: #46464F">Authentik never sees your password.</p>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>
