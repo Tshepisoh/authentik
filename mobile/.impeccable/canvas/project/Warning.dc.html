@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Warning detail</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0;font-family:'Roboto',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+::selection{background:#DDE1FF;color:#001356}
+a{color:#3451C7;text-decoration:none}
+a:hover{color:#23389A}
+.tap{cursor:pointer;transition:filter .2s cubic-bezier(.2,0,0,1)}
+.tap:hover{filter:brightness(.96)}
+.tap:active{filter:brightness(.92)}
+.tap:focus-visible{outline:3px solid #3451C7;outline-offset:2px}
+.tap:disabled{cursor:progress;opacity:.7}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+</style>
+</helmet>
+<div style="width: 390px; height: 1120px; background: #FBF8FF; color: #1B1B21; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 8px 4px; flex: none">
+    <a href="Main.dc.html" class="tap" aria-label="Back" style="width: 48px; height: 48px; border-radius: 24px; color: #1B1B21; display: flex; align-items: center; justify-content: center">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+    </a>
+    <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 400">Warning</h1>
+  </header>
+
+  <main style="flex: 1; padding: 0 16px 24px; display: flex; flex-direction: column; gap: 28px">
+
+    <section style="display: flex; flex-direction: column; gap: 12px; padding: 4px 4px 0">
+      <span style="align-self: flex-start; display: flex; align-items: center; gap: 6px; background: #BA1A1A; color: #FFFFFF; border-radius: 8px; padding: 6px 12px 6px 8px; font-size: 14px; line-height: 20px; font-weight: 500">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; stroke-width: 2.2"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+        Likely scam
+      </span>
+      <h2 style="margin: 0; font-size: 32px; line-height: 40px; font-weight: 400; letter-spacing: -0.01em">Don’t release the item yet</h2>
+      <p style="margin: 0; font-size: 16px; line-height: 24px; color: #46464F">A notification saying a payment arrived doesn’t confirm the money reached your account.</p>
+      <p style="margin: 4px 0 0; display: flex; align-items: center; gap: 8px; font-size: 14px; line-height: 20px; color: #46464F">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 20px; height: 20px"><path d="M4 5h16v11H8l-4 4z"></path></svg>
+        From Messages · Today, 14:32
+      </p>
+    </section>
+
+    <section style="background: #FFF0EE; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 16px">
+      <h3 style="margin: 0; font-size: 16px; line-height: 24px; font-weight: 500; color: #410002">What to do</h3>
+      <ol style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 14px">
+        <li style="display: flex; gap: 14px; align-items: flex-start">
+          <span style="width: 28px; height: 28px; border-radius: 14px; background: #BA1A1A; color: #FFFFFF; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex: none">1</span>
+          <span style="font-size: 16px; line-height: 24px; color: #410002">Open your own banking app yourself. Don’t use a link or number from the message.</span>
+        </li>
+        <li style="display: flex; gap: 14px; align-items: flex-start">
+          <span style="width: 28px; height: 28px; border-radius: 14px; background: #BA1A1A; color: #FFFFFF; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex: none">2</span>
+          <span style="font-size: 16px; line-height: 24px; color: #410002">Check the money shows in your available balance, not just as pending.</span>
+        </li>
+        <li style="display: flex; gap: 14px; align-items: flex-start">
+          <span style="width: 28px; height: 28px; border-radius: 14px; background: #BA1A1A; color: #FFFFFF; font-size: 14px; font-weight: 500; display: flex; align-items: center; justify-content: center; flex: none">3</span>
+          <span style="font-size: 16px; line-height: 24px; color: #410002">Only then hand over the item.</span>
+        </li>
+      </ol>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <h3 style="margin: 0 4px 8px; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">What we noticed</h3>
+      <div style="display: flex; gap: 16px; padding: 10px 4px; align-items: flex-start">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #BA1A1A; margin-top: 2px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; line-height: 24px; font-weight: 500">Pressure to hand over goods</span>
+          <span style="font-size: 14px; line-height: 20px; color: #46464F">A fake payment message followed by “release the item now” is a common marketplace scam. Banks don’t tell you to release goods.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px; padding: 10px 4px; align-items: flex-start">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #7A5900; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.5"></path></svg>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; line-height: 24px; font-weight: 500">Claims a payment was made</span>
+          <span style="font-size: 14px; line-height: 20px; color: #46464F">A notification can say anything. Only your banking app shows what actually arrived.</span>
+        </div>
+      </div>
+      <div style="display: flex; gap: 16px; padding: 10px 4px; align-items: flex-start">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F; margin-top: 2px"><path d="M4 5h16v11H8l-4 4z"></path></svg>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 16px; line-height: 24px; font-weight: 500">Came as a message, not from a bank app</span>
+          <span style="font-size: 14px; line-height: 20px; color: #46464F">Anyone can send a message that looks like a bank alert.</span>
+        </div>
+      </div>
+    </section>
+
+    <section style="border: 1px solid #C7C5D0; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+      <div style="display: flex; gap: 16px; align-items: center">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+          <span style="font-size: 14px; line-height: 20px; color: #46464F">Link in the message</span>
+          <span style="font-size: 16px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">secure-payfast-verify.co</span>
+        </div>
+      </div>
+      <sc-if value="{{ notChecked }}" hint-placeholder-val="{{ true }}">
+        <button class="tap" onClick="{{ check }}" disabled="{{ checking }}" style="height: 40px; border: 0; border-radius: 20px; background: #DFE1F9; color: #171B2C; font-size: 14px; line-height: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px">{{ checkLabel }}</button>
+        <p style="margin: 0; font-size: 12px; line-height: 16px; color: #46464F">Sends the site name and the warning types to Authentik. Never the message.</p>
+      </sc-if>
+      <sc-if value="{{ checked }}" hint-placeholder-val="{{ false }}">
+        <div style="display: flex; flex-direction: column; gap: 6px">
+          <span style="align-self: flex-start; font-size: 12px; line-height: 16px; font-weight: 500; background: #FFDAD6; color: #410002; border-radius: 8px; padding: 6px 10px">High risk</span>
+          <span style="font-size: 14px; line-height: 20px">On Authentik’s list of reported fraud, and it uses the Payfast name without being a Payfast site.</span>
+        </div>
+      </sc-if>
+    </section>
+
+    <p style="margin: 0 4px; display: flex; gap: 12px; align-items: flex-start; font-size: 14px; line-height: 20px; color: #46464F">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 20px; height: 20px"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+      Checked on this phone. Authentik doesn’t keep the message text.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: auto">
+      <a href="Main.dc.html" class="tap" style="height: 48px; border-radius: 24px; background: #3451C7; color: #FFFFFF; font-size: 14px; line-height: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center">Got it</a>
+      <button class="tap" style="height: 48px; border: 0; border-radius: 24px; background: transparent; color: #3451C7; font-size: 14px; line-height: 20px; font-weight: 500">This warning looks wrong</button>
+    </div>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1120}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { phase: 'idle' };
+  }
+  renderVals() {
+    const phase = this.state.phase;
+    return {
+      notChecked: phase !== 'done',
+      checked: phase === 'done',
+      checking: phase === 'checking',
+      checkLabel: phase === 'checking' ? 'Checking…' : 'Check link online',
+      check: () => {
+        this.setState({ phase: 'checking' });
+        setTimeout(() => this.setState({ phase: 'done' }), 900);
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

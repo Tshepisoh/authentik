@@ -1,0 +1,10 @@
+# What EAS Build uploads from mobile/ (used instead of git while the repo has no commits).
+node_modules/
+.expo/
+dist/
+web-build/
+/android
+/ios
+.impeccable/
+*.log
+.env*.local

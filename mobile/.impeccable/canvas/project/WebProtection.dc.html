@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Web protection</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0;font-family:'Roboto',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+::selection{background:#DDE1FF;color:#001356}
+a{color:#3451C7;text-decoration:none}
+a:hover{color:#23389A}
+.tap{cursor:pointer;transition:filter .2s cubic-bezier(.2,0,0,1)}
+.tap:hover{filter:brightness(.96)}
+.tap:active{filter:brightness(.92)}
+.tap:focus-visible{outline:3px solid #3451C7;outline-offset:2px}
+.tap:disabled{cursor:not-allowed;background:#E4E1E9 !important;color:#76757F !important}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+</style>
+</helmet>
+<div style="width: 390px; height: 1180px; background: #FBF8FF; color: #1B1B21; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 8px 4px; flex: none">
+    <a href="Main.dc.html" class="tap" aria-label="Back" style="width: 48px; height: 48px; border-radius: 24px; color: #1B1B21; display: flex; align-items: center; justify-content: center">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+    </a>
+    <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 400">Web protection</h1>
+  </header>
+
+  <sc-if value="{{ isOff }}" hint-placeholder-val="{{ true }}">
+    <main style="flex: 1; padding: 4px 16px 24px; display: flex; flex-direction: column; gap: 20px">
+      <div style="display: flex; flex-direction: column; gap: 8px; padding: 0 4px">
+        <h2 style="margin: 0; font-size: 28px; line-height: 36px; font-weight: 400">Block scam sites in every app</h2>
+        <p style="margin: 0; font-size: 16px; line-height: 24px; color: #46464F">Web protection uses Android’s VPN feature, entirely on this phone. Here’s exactly what that means.</p>
+      </div>
+
+      <section aria-label="What web protection does with your data" style="background: #F5F2FA; border-radius: 24px; padding: 8px 16px; display: flex; flex-direction: column">
+        <div style="display: flex; gap: 16px; padding: 12px 0; align-items: flex-start; border-bottom: 1px solid #E4E1E9">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #3451C7; margin-top: 2px"><path d="M2.5 12C4 9 7.5 6 12 6s8 3 9.5 6c-1.5 3-5 6-9.5 6s-8-3-9.5-6z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">What it sees</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">The names of sites that apps look up, like example.com. Not the pages, not what you type, and no other traffic.</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 16px; padding: 12px 0; align-items: flex-start; border-bottom: 1px solid #E4E1E9">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #3451C7; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M6 6l12 12"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">What it does</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Stops known scam sites from loading, and warns you about sites pretending to be a bank or payment service.</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 16px; padding: 12px 0; align-items: flex-start; border-bottom: 1px solid #E4E1E9">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #3451C7; margin-top: 2px"><rect x="5" y="11" width="14" height="9" rx="2"></rect><path d="M8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">What’s kept</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Only the sites it blocked or warned about, on this phone, for 7 days. Nothing else is recorded or sent to Authentik.</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 16px; padding: 12px 0; align-items: flex-start; border-bottom: 1px solid #E4E1E9">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #3451C7; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">Where lookups go</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">On to your network’s usual DNS server, as they would without Authentik. If there isn’t one, to Cloudflare or Google.</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 16px; padding: 12px 0; align-items: flex-start">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #3451C7; margin-top: 2px"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8v.5"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">Good to know</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">It doesn’t hide your location or encrypt your traffic. Android allows one VPN at a time, so this replaces any other VPN you use.</span>
+          </div>
+        </div>
+      </section>
+
+      <label class="tap" style="display: flex; gap: 12px; align-items: center; padding: 4px; border-radius: 12px; min-height: 56px">
+        <input type="checkbox" checked="{{ agreed }}" onChange="{{ toggleAgree }}" style="width: 20px; height: 20px; margin: 14px; accent-color: #3451C7; flex: none">
+        <span style="font-size: 16px; line-height: 24px">I understand what web protection sees and agree to turn it on.</span>
+      </label>
+
+      <div style="display: flex; flex-direction: column; gap: 8px; margin-top: auto">
+        <button class="tap" disabled="{{ notAgreed }}" onClick="{{ turnOn }}" style="height: 48px; border: 0; border-radius: 24px; background: #3451C7; color: #FFFFFF; font-size: 14px; line-height: 20px; font-weight: 500">Turn on</button>
+        <p style="margin: 0; text-align: center; font-size: 12px; line-height: 16px; color: #46464F">Android will ask you to allow the connection next.</p>
+      </div>
+    </main>
+  </sc-if>
+
+  <sc-if value="{{ isOn }}" hint-placeholder-val="{{ false }}">
+    <main style="flex: 1; padding: 4px 16px 24px; display: flex; flex-direction: column; gap: 24px">
+      <section style="background: #C4EED0; color: #00210D; border-radius: 28px; padding: 20px; display: flex; flex-direction: column; gap: 14px">
+        <div style="display: flex; gap: 16px; align-items: center">
+          <span style="width: 56px; height: 56px; border-radius: 28px; background: #1F6B3E; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex: none">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 28px; height: 28px"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"></path><path d="M9 12l2 2 4-4"></path></svg>
+          </span>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <h2 style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 400">Web protection is on</h2>
+            <p style="margin: 0; font-size: 14px; line-height: 20px; color: #0F3D22">On since 08:14</p>
+          </div>
+        </div>
+        <p style="margin: 0; font-size: 14px; line-height: 20px; color: #0F3D22">1,284 lookups checked today. 1 site blocked, 1 warning.</p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 4px">
+        <h3 style="margin: 0 4px 4px; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">Blocked and flagged</h3>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 10px 4px; min-height: 72px">
+          <span style="width: 40px; height: 40px; border-radius: 20px; background: #FFDAD6; color: #BA1A1A; display: flex; align-items: center; justify-content: center; flex: none">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 20px; height: 20px"><circle cx="12" cy="12" r="9"></circle><path d="M6 6l12 12"></path></svg>
+          </span>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+            <span style="font-size: 16px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">takealot-deals.co</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Blocked · Reported fraud · 10:02</span>
+          </span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 10px 4px; min-height: 72px">
+          <span style="width: 40px; height: 40px; border-radius: 20px; background: #FFDF9E; color: #7A5900; display: flex; align-items: center; justify-content: center; flex: none">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 20px; height: 20px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+          </span>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+            <span style="font-size: 16px; line-height: 24px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap">absa-secure-login.help</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Allowed with a warning · Imitates Absa · Yesterday</span>
+          </span>
+        </div>
+      </section>
+
+      <a href="WebProtection.dc.html" class="tap" style="border: 1px solid #C7C5D0; border-radius: 16px; padding: 16px; display: flex; gap: 16px; align-items: center; color: #1B1B21">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><path d="M4 12a8 8 0 0 1 14-5.3M20 12a8 8 0 0 1-14 5.3"></path><path d="M18 3v4h-4M6 21v-4h4"></path></svg>
+        <span style="flex: 1; display: flex; flex-direction: column">
+          <span style="font-size: 16px; line-height: 24px">Keep it on after a restart</span>
+          <span style="font-size: 14px; line-height: 20px; color: #46464F">In Android’s VPN settings, choose Authentik and turn on Always-on VPN</span>
+        </span>
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><path d="M9 6l6 6-6 6"></path></svg>
+      </a>
+
+      <section style="display: flex; flex-direction: column; gap: 8px; padding: 0 4px">
+        <h3 style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">What it can’t see</h3>
+        <p style="margin: 0; font-size: 14px; line-height: 20px">Full addresses or pages, only site names. Share a link to Authentik to check the whole address.</p>
+        <p style="margin: 0; font-size: 14px; line-height: 20px">Apps or browsers that use their own secure DNS, or Private DNS set to a provider.</p>
+        <p style="margin: 0; font-size: 14px; line-height: 20px">New scam sites that aren’t on the list yet. A site that isn’t blocked isn’t proven safe.</p>
+      </section>
+
+      <button class="tap" onClick="{{ turnOff }}" style="margin-top: auto; height: 48px; border: 1px solid #777680; border-radius: 24px; background: transparent; color: #3451C7; font-size: 14px; line-height: 20px; font-weight: 500">Turn off</button>
+    </main>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"startOn":{"editor":"boolean","default":false},"$preview":{"width":390,"height":1180}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { on: props.startOn ?? false, agreed: false };
+  }
+  renderVals() {
+    const { on, agreed } = this.state;
+    return {
+      isOff: !on,
+      isOn: on,
+      agreed,
+      notAgreed: !agreed,
+      toggleAgree: () => this.setState({ agreed: !this.state.agreed }),
+      turnOn: () => this.setState({ on: true }),
+      turnOff: () => this.setState({ on: false, agreed: false }),
+    };
+  }
+}
+</script>
+</body>
+</html>

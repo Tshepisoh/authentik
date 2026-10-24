@@ -1,0 +1,31 @@
+{
+  "name": "@authentik/shared",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Types, API contracts and network-safety primitives shared by the Authentik backend, sandbox worker and mobile app.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./net": {
+      "types": "./dist/net.d.ts",
+      "default": "./dist/net.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "prepare": "tsc -p tsconfig.json",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "ipaddr.js": "^2.5.0",
+    "tldts": "^7.4.19"
+  }
+}

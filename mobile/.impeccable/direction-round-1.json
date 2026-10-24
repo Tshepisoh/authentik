@@ -1,0 +1,63 @@
+{
+  "title": "Choose Authentik's visual world",
+  "question": "The roll assigned the Token Slip world. Keep it, take an alternate, re-roll, or choose the category standard.",
+  "options": [
+    {
+      "id": "assigned",
+      "label": "Token Slip",
+      "kicker": "THE ROLL",
+      "lineage": "Prepaid electricity token slips and airtime vouchers",
+      "thesis": "Every verdict is printed like a token slip: labelled fields for what was checked, what was found and what couldn't be checked.",
+      "palette": ["#EEF1F0", "#1C2533", "#C8281E", "#E8A317", "#1F7A4D"],
+      "materials": ["thermal-paper white", "blue-black print ink", "perforated tear lines", "4-digit field groups"],
+      "viewport": "Home opens on a live protection slip (Notifications ON, Web ON, threat list date) above a torn-off stack of recent slips; a warning slip carries a full-width red band.",
+      "risk": "Turns into a printout gimmick if the slip shape is used everywhere instead of only for verdicts and evidence."
+    },
+    {
+      "id": "challenger-warm-consumer",
+      "label": "Everyday Banking Card",
+      "lineage": "warm consumer app surfaces",
+      "thesis": "Soft cards on a warm ground, plain labels, and one bright colour reserved for things you can press.",
+      "case": "Fuses cleanly and reads instantly to everyday users, but sits close to every SA banking app, so a warning can look like just another card.",
+      "palette": ["#F3F0EA", "#FFFFFF", "#1A1D24", "#0B5FFF", "#C8281E"],
+      "viewport": "A greeting, a rounded status card, protection cards with switches, and a thumb-reach bottom bar.",
+      "risk": "Generic: hard to tell apart from the user's bank app at a glance.",
+      "hero": "https://impeccable.style/worlds/cards/digital-design-canon-warm-consumer-app-surface-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/digital-design-canon-warm-consumer-app-surface.webp"
+    },
+    {
+      "id": "challenger-catalog-record",
+      "label": "Numbered Record",
+      "lineage": "catalog-sleeve identity with reference numbers",
+      "thesis": "Every check is a numbered record on matte black; a coded colour strip shows which checks ran.",
+      "case": "Reference numbers echo bank and proof-of-payment references, but the dark coded look is cold and asks less confident users to decode it.",
+      "palette": ["#111111", "#F2F2F2", "#E23B2E", "#F2B705", "#2E9E5B"],
+      "viewport": "A full-black index of numbered records with one decoded in full colour at the top.",
+      "risk": "Colour-as-code fails users who can't decode it quickly under pressure.",
+      "hero": "https://impeccable.style/worlds/cards/brand-identity-canon-saville-catalog-sleeve-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/brand-identity-canon-saville-catalog-sleeve.webp"
+    },
+    {
+      "id": "challenger-rows",
+      "label": "Swipe Rows",
+      "lineage": "streaming-app title rows",
+      "thesis": "Home as rows you swipe through (Warnings, Blocked sites, Checks); the item you land on opens up and explains itself.",
+      "case": "Familiar from Showmax and Netflix and good for browsing history, but protection status isn't a catalogue, so an urgent warning can get lost in a row.",
+      "palette": ["#14161B", "#F5F6F8", "#2F80ED", "#C8281E", "#E8A317"],
+      "viewport": "Stacked horizontal rows of tiles with the focused tile expanded to its verdict and reason.",
+      "risk": "Buries the single most urgent thing among browsable items.",
+      "hero": "https://impeccable.style/worlds/cards/pop-culture-shelf-streaming-title-card-wall-hero.webp",
+      "board": "https://impeccable.style/worlds/cards/pop-culture-shelf-streaming-title-card-wall.webp"
+    }
+  ],
+  "reroll": true,
+  "canon": true,
+  "canonCard": {
+    "label": "The category standard",
+    "thesis": "A Material 3 security app like Google Play Protect or a banking app's security centre, executed at full craft.",
+    "palette": ["#FFFFFF", "#1B1B1F", "#3A5BD9", "#1E8E3E", "#D93025"],
+    "viewport": "Top app bar, a 'You're protected' status card, protections with switches, recent activity, bottom navigation.",
+    "risk": "Looks like every other security app; trust comes from execution alone."
+  },
+  "steer": true
+}

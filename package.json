@@ -1,0 +1,27 @@
+{
+  "name": "authentik",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Authentik — Android-first fraud detection: suspicious notifications, domains and payment claims.",
+  "workspaces": [
+    "packages/shared",
+    "backend",
+    "sandbox-worker"
+  ],
+  "scripts": {
+    "build": "npm run build -w @authentik/shared && npm run build -w @authentik/backend -w @authentik/sandbox-worker",
+    "typecheck": "npm run build -w @authentik/shared && npm run typecheck -w @authentik/backend -w @authentik/sandbox-worker",
+    "test": "npm run build -w @authentik/shared && npm test -w @authentik/shared -w @authentik/backend -w @authentik/sandbox-worker",
+    "dev:backend": "npm run dev -w @authentik/backend",
+    "dev:worker": "npm run dev -w @authentik/sandbox-worker",
+    "typecheck:mobile": "npm run typecheck --prefix mobile"
+  },
+  "engines": {
+    "node": ">=20.11"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.5",
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.5"
+  }
+}

@@ -1,0 +1,85 @@
+# Local / single-host topology. See docs/architecture.md for the production equivalent.
+#
+#   phone ──► api ──(sandbox-control, internal only)──► sandbox-worker ──(sandbox-egress)──► internet
+#
+# The worker has no route to the API's network beyond its control port, holds no
+# database or Firebase credentials, and runs read-only with all capabilities dropped.
+
+services:
+  api:
+    build: { context: ., dockerfile: backend/Dockerfile }
+    env_file: backend/.env
+    # These override backend/.env, which is written for `npm run dev` on the host.
+    environment:
+      NODE_ENV: production
+      PORT: "8080"
+      # One proxy hop (the ngrok tunnel), so rate limits see the phone's address.
+      TRUST_PROXY_HOPS: "1"
+      GOOGLE_APPLICATION_CREDENTIALS: /run/secrets/firebase_admin
+      SANDBOX_WORKER_URL: http://sandbox-worker:8090
+      SANDBOX_WORKER_SECRET: ${SANDBOX_WORKER_SECRET:?set SANDBOX_WORKER_SECRET (32+ chars) in .env}
+    secrets: [firebase_admin]
+    ports: ["127.0.0.1:8080:8080"]
+    networks: [public, sandbox-control]
+    healthcheck:
+      test: ["CMD", "node", "-e", "fetch('http://127.0.0.1:8080/health').then(r=>process.exit(r.ok?0:1),()=>process.exit(1))"]
+      interval: 30s
+      timeout: 5s
+      start_period: 20s
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=64m
+    cap_drop: [ALL]
+    security_opt: ["no-new-privileges:true"]
+    restart: unless-stopped
+
+  sandbox-worker:
+    build: { context: ., dockerfile: sandbox-worker/Dockerfile }
+    environment:
+      # Only this secret — never Firebase, database or cloud credentials (the worker refuses to start if it sees any).
+      WORKER_SECRET: ${SANDBOX_WORKER_SECRET:?set SANDBOX_WORKER_SECRET (32+ chars) in .env}
+      MAX_SESSIONS: "4"
+      MAX_SESSION_SECONDS: "900"
+    networks: [sandbox-control, sandbox-egress]
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=1g
+    shm_size: 1gb # Chromium uses /dev/shm heavily
+    cap_drop: [ALL]
+    security_opt:
+      - "no-new-privileges:true"
+      # Allow-list profile from Playwright that permits Chromium's own sandbox (user namespaces).
+      - "seccomp=./sandbox-worker/docker/seccomp-chromium.json"
+    mem_limit: 3g
+    cpus: 2
+    pids_limit: 512
+    ulimits:
+      nofile: { soft: 4096, hard: 4096 }
+    restart: unless-stopped
+
+  # Public https address for phones: `docker compose --profile tunnel up -d`.
+  # Forwards to the API only; the worker is never exposed.
+  tunnel:
+    profiles: [tunnel]
+    image: ngrok/ngrok:3
+    command: ["http", "--url=${NGROK_DOMAIN:-}", "--log=stdout", "api:8080"]
+    environment:
+      NGROK_AUTHTOKEN: ${NGROK_AUTHTOKEN:-}
+    depends_on:
+      api: { condition: service_healthy }
+    networks: [public]
+    restart: unless-stopped
+
+secrets:
+  # Firebase Admin key, copied by hand to the repo root (never committed, see docs/hosting.md).
+  firebase_admin:
+    file: ./firebase-adminsdk.json
+
+networks:
+  public: {}
+  # No external access: only the API can reach the worker's control port.
+  sandbox-control:
+    internal: true
+  # The worker's only route out. In production, also deny RFC 1918, link-local and
+  # metadata ranges at the network layer (see docs/threat-model.md, T4).
+  sandbox-egress: {}

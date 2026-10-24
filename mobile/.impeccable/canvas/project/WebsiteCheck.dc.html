@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Check a website</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0;font-family:'Roboto',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+::selection{background:#DDE1FF;color:#001356}
+a{color:#3451C7;text-decoration:none}
+a:hover{color:#23389A}
+input{font:inherit;caret-color:#3451C7}
+input:focus{outline:none}
+.field:focus-within{border-color:#3451C7 !important;box-shadow:inset 0 0 0 1px #3451C7}
+.tap{cursor:pointer;transition:filter .2s cubic-bezier(.2,0,0,1)}
+.tap:hover{filter:brightness(.96)}
+.tap:active{filter:brightness(.92)}
+.tap:focus-visible{outline:3px solid #3451C7;outline-offset:2px}
+.tap:disabled{cursor:progress;opacity:.7}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+</style>
+</helmet>
+<div style="width: 390px; height: 1240px; background: #FBF8FF; color: #1B1B21; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="height: 64px; display: flex; align-items: center; gap: 4px; padding: 8px 4px; flex: none">
+    <a href="Main.dc.html" class="tap" aria-label="Back" style="width: 48px; height: 48px; border-radius: 24px; color: #1B1B21; display: flex; align-items: center; justify-content: center">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"></path></svg>
+    </a>
+    <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 400">Check a website</h1>
+  </header>
+
+  <main style="flex: 1; padding: 8px 16px 24px; display: flex; flex-direction: column; gap: 24px">
+
+    <form style="display: flex; flex-direction: column; gap: 12px" onSubmit="{{ submit }}">
+      <label for="site" style="font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F; padding-left: 4px">Website or link</label>
+      <div class="field" style="height: 56px; border: 1px solid #777680; border-radius: 12px; display: flex; align-items: center; padding: 0 4px 0 16px; gap: 8px; background: #FBF8FF">
+        <input id="site" value="{{ site }}" onChange="{{ type }}" inputMode="url" autoComplete="off" style="flex: 1; min-width: 0; border: 0; background: transparent; font-size: 16px; line-height: 24px; color: #1B1B21">
+        <button type="button" class="tap" aria-label="Clear" onClick="{{ clear }}" style="width: 48px; height: 48px; border: 0; border-radius: 24px; background: transparent; color: #46464F; display: flex; align-items: center; justify-content: center">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"></path></svg>
+        </button>
+      </div>
+      <p style="margin: 0; font-size: 12px; line-height: 16px; color: #46464F; padding-left: 4px">Paste a link, or share one to Authentik from any app.</p>
+      <button type="submit" class="tap" disabled="{{ checking }}" style="height: 48px; border: 0; border-radius: 24px; background: #3451C7; color: #FFFFFF; font-size: 14px; line-height: 20px; font-weight: 500">{{ buttonLabel }}</button>
+    </form>
+
+    <sc-if value="{{ checking }}" hint-placeholder-val="{{ false }}">
+      <p role="status" style="margin: 0; padding: 32px 16px; text-align: center; font-size: 14px; line-height: 20px; color: #46464F">Checking scam lists, look-alike names and the domain…</p>
+    </sc-if>
+
+    <sc-if value="{{ showResult }}" hint-placeholder-val="{{ true }}">
+      <section aria-live="polite" style="background: #FFDAD6; color: #410002; border-radius: 24px; padding: 20px; display: flex; flex-direction: column; gap: 12px">
+        <span style="align-self: flex-start; display: flex; align-items: center; gap: 6px; background: #BA1A1A; color: #FFFFFF; border-radius: 8px; padding: 6px 12px 6px 8px; font-size: 14px; line-height: 20px; font-weight: 500">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 18px; height: 18px; stroke-width: 2.2"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+          High risk
+        </span>
+        <h2 style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 400">Strong signs of fraud. Avoid this site.</h2>
+        <p style="margin: 0; font-size: 14px; line-height: 20px; color: #6B1F1A">fnb-online-verify.co.za · Checked just now</p>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 4px">
+        <h3 style="margin: 0 4px 8px; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">What we found</h3>
+        <div style="display: flex; gap: 16px; padding: 8px 4px; align-items: flex-start">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #BA1A1A; margin-top: 2px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">Reported as fraud</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">This site is on Authentik’s list of reported scam sites.</span>
+          </div>
+        </div>
+        <div style="display: flex; gap: 16px; padding: 8px 4px; align-items: flex-start">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #BA1A1A; margin-top: 2px"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">Uses the FNB name</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">The address contains “fnb” but isn’t an FNB website. Scammers add words like “online” or “verify” to a bank’s name.</span>
+          </div>
+        </div>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 8px">
+        <h3 style="margin: 0 4px; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">What we checked</h3>
+        <ul style="list-style: none; margin: 0; padding: 0; border: 1px solid #C7C5D0; border-radius: 16px; overflow: hidden">
+          <li style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; min-height: 56px; border-bottom: 1px solid #C7C5D0">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #1F6B3E"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg>
+            <span style="flex: 1; font-size: 16px; line-height: 24px">Known scam lists</span>
+            <span style="font-size: 14px; line-height: 20px; font-weight: 500; color: #BA1A1A">Listed</span>
+          </li>
+          <li style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; min-height: 56px; border-bottom: 1px solid #C7C5D0">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #1F6B3E"><circle cx="12" cy="12" r="9"></circle><path d="M8 12l3 3 5-6"></path></svg>
+            <span style="flex: 1; font-size: 16px; line-height: 24px">Look-alike names</span>
+            <span style="font-size: 14px; line-height: 20px; font-weight: 500; color: #BA1A1A">Match</span>
+          </li>
+          <li style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; min-height: 56px; border-bottom: 1px solid #C7C5D0">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5D5E68"><circle cx="12" cy="12" r="9"></circle><path d="M8 12h8"></path></svg>
+            <span style="flex: 1; display: flex; flex-direction: column">
+              <span style="font-size: 16px; line-height: 24px">Google Safe Browsing</span>
+              <span style="font-size: 14px; line-height: 20px; color: #46464F">Didn’t respond</span>
+            </span>
+            <span style="font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">Couldn’t check</span>
+          </li>
+          <li style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; min-height: 56px; border-bottom: 1px solid #C7C5D0">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5D5E68"><circle cx="12" cy="12" r="9"></circle><path d="M8 12h8"></path></svg>
+            <span style="flex: 1; display: flex; flex-direction: column">
+              <span style="font-size: 16px; line-height: 24px">Domain age</span>
+              <span style="font-size: 14px; line-height: 20px; color: #46464F">The registry doesn’t publish it</span>
+            </span>
+            <span style="font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">Couldn’t check</span>
+          </li>
+          <li style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; min-height: 56px">
+            <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #5D5E68"><circle cx="12" cy="12" r="9"></circle><path d="M8 12h8"></path></svg>
+            <span style="flex: 1; display: flex; flex-direction: column">
+              <span style="font-size: 16px; line-height: 24px">Page contents</span>
+              <span style="font-size: 14px; line-height: 20px; color: #46464F">Not visited, to keep you safe</span>
+            </span>
+            <span style="font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">Skipped</span>
+          </li>
+        </ul>
+      </section>
+
+      <section style="display: flex; flex-direction: column; gap: 10px; padding: 0 4px">
+        <h3 style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">What to do</h3>
+        <p style="margin: 0; font-size: 16px; line-height: 24px">Don’t enter any personal, login or card details on this site.</p>
+        <p style="margin: 0; font-size: 16px; line-height: 24px">Use the FNB app, or type FNB’s address yourself.</p>
+        <p style="margin: 0; font-size: 16px; line-height: 24px">Already entered details? Call your bank on the number on your card now.</p>
+      </section>
+
+      <div style="display: flex; flex-direction: column; gap: 8px">
+        <button class="tap" style="height: 48px; border: 1px solid #777680; border-radius: 24px; background: transparent; color: #3451C7; font-size: 14px; line-height: 20px; font-weight: 500">Look at it safely in the Sandbox</button>
+        <a href="Main.dc.html" class="tap" style="height: 48px; border-radius: 24px; color: #3451C7; font-size: 14px; line-height: 20px; font-weight: 500; display: flex; align-items: center; justify-content: center">Done</a>
+      </div>
+    </sc-if>
+  </main>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1240}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    this.state = { site: 'fnb-online-verify.co.za', phase: 'done' };
+  }
+  renderVals() {
+    const { site, phase } = this.state;
+    return {
+      site,
+      checking: phase === 'checking',
+      showResult: phase === 'done',
+      buttonLabel: phase === 'checking' ? 'Checking…' : 'Check',
+      type: (e) => this.setState({ site: e.target.value }),
+      clear: () => this.setState({ site: '', phase: 'idle' }),
+      submit: (e) => {
+        e.preventDefault();
+        if (!this.state.site.trim()) return;
+        this.setState({ phase: 'checking' });
+        setTimeout(() => this.setState({ phase: 'done' }), 1200);
+      },
+    };
+  }
+}
+</script>
+</body>
+</html>

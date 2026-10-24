@@ -1,0 +1,12 @@
+**/node_modules
+**/dist
+**/.env
+**/.env.*
+!**/.env.example
+**/*service-account*.json
+**/*firebase-adminsdk*.json
+mobile
+docs
+.git
+**/*.log
+**/coverage

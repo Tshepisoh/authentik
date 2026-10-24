@@ -1,0 +1,27 @@
+{
+  "name": "@authentik/sandbox-worker",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Disposable, isolated remote browser sessions for the Authentik Sandbox. Runs on its own network boundary with no database or Firebase credentials.",
+  "type": "module",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch --env-file-if-exists=.env src/index.ts",
+    "build": "tsc -p tsconfig.build.json",
+    "start": "node dist/index.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run",
+    "browsers": "playwright-core install chromium"
+  },
+  "dependencies": {
+    "@authentik/shared": "0.1.0",
+    "pino": "^10.4.0",
+    "playwright-core": "^1.64.1",
+    "ws": "^8.22.0",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.2",
+    "tsx": "^4.23.15"
+  }
+}

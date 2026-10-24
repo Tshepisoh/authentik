@@ -1,0 +1,39 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+  <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+  <!-- VPN apps use the systemExempted foreground-service type (Android 14+). -->
+  <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
+
+  <application>
+    <!-- Bound by Android only after the user grants notification access in Settings. -->
+    <service
+      android:name="app.authentik.protection.ProtectionListenerService"
+      android:label="@string/authentik_protection_service_label"
+      android:permission="android.permission.BIND_NOTIFICATION_LISTENER_SERVICE"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.service.notification.NotificationListenerService" />
+      </intent-filter>
+      <!-- Android 12+: skip silent and ongoing notifications. -->
+      <meta-data
+        android:name="android.service.notification.default_filter_types"
+        android:value="conversations|alerting" />
+    </service>
+
+    <!-- Local DNS-only VPN. Started only after the in-app disclosure and Android's VPN consent.
+         Exported so Android can bind it (e.g. always-on); BIND_VPN_SERVICE is system-only. -->
+    <service
+      android:name="app.authentik.protection.VpnProtectionService"
+      android:label="@string/authentik_vpn_label"
+      android:permission="android.permission.BIND_VPN_SERVICE"
+      android:foregroundServiceType="systemExempted"
+      android:exported="true">
+      <intent-filter>
+        <action android:name="android.net.VpnService" />
+      </intent-filter>
+      <meta-data
+        android:name="android.net.VpnService.SUPPORTS_ALWAYS_ON"
+        android:value="true" />
+    </service>
+  </application>
+</manifest>

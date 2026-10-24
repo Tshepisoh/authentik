@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Authentik home</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&amp;display=swap">
+<style>
+body{margin:0;font-family:'Roboto',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+*{box-sizing:border-box}
+::selection{background:#DDE1FF;color:#001356}
+a{color:#3451C7;text-decoration:none}
+a:hover{color:#23389A}
+.tap{cursor:pointer;transition:filter .2s cubic-bezier(.2,0,0,1)}
+.tap:hover{filter:brightness(.96)}
+.tap:active{filter:brightness(.92)}
+.tap:focus-visible{outline:3px solid #3451C7;outline-offset:2px}
+.i{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+</style>
+</helmet>
+<div style="width: 390px; height: 1060px; background: #FBF8FF; color: #1B1B21; position: relative; display: flex; flex-direction: column; overflow: hidden">
+
+  <header style="height: 64px; display: flex; align-items: center; justify-content: space-between; padding: 8px 4px 8px 16px; flex: none">
+    <h1 style="margin: 0; font-size: 22px; line-height: 28px; font-weight: 400">Authentik</h1>
+    <button class="tap" aria-label="Account" style="width: 48px; height: 48px; border: 0; border-radius: 24px; background: transparent; color: #46464F; display: flex; align-items: center; justify-content: center">
+      <span style="width: 32px; height: 32px; border-radius: 16px; background: #DDE1FF; color: #001356; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 500">TH</span>
+    </button>
+  </header>
+
+  <main style="flex: 1; padding: 4px 16px 112px; display: flex; flex-direction: column; gap: 24px">
+
+    <section aria-label="Protection status" style="background: #DDE1FF; color: #001356; border-radius: 28px; padding: 20px 20px 16px; display: flex; flex-direction: column; gap: 16px">
+      <div style="display: flex; gap: 16px; align-items: center">
+        <span style="width: 56px; height: 56px; border-radius: 28px; background: #3451C7; color: #FFFFFF; display: flex; align-items: center; justify-content: center; flex: none">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 28px; height: 28px"><path d="M12 3l7 3v5c0 4.5-3 8.3-7 10-4-1.7-7-5.5-7-10V6l7-3z"></path><path d="M9 12l2 2 4-4"></path></svg>
+        </span>
+        <div style="display: flex; flex-direction: column; gap: 2px">
+          <h2 style="margin: 0; font-size: 24px; line-height: 32px; font-weight: 400">Protection is on</h2>
+          <p style="margin: 0; font-size: 14px; line-height: 20px; color: #2D3A6E">Both protections are running on this phone.</p>
+        </div>
+      </div>
+      <p style="margin: 0; font-size: 14px; line-height: 20px; color: #2D3A6E">Checking new notifications and blocking known scam sites. Threat list updated 2 hours ago.</p>
+    </section>
+
+    <a href="Warning.dc.html" class="tap" style="background: #FFDAD6; color: #410002; border-radius: 16px; padding: 16px; display: flex; gap: 16px; align-items: center">
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #BA1A1A"><path d="M12 4l9 16H3z"></path><path d="M12 10v4M12 17v.5"></path></svg>
+      <span style="flex: 1; display: flex; flex-direction: column; gap: 2px">
+        <span style="font-size: 16px; line-height: 24px; font-weight: 500">Don’t release the item yet</span>
+        <span style="font-size: 14px; line-height: 20px; color: #6B1F1A">Likely scam · Messages · 4 min ago</span>
+      </span>
+      <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6l6 6-6 6"></path></svg>
+    </a>
+
+    <section style="display: flex; flex-direction: column; gap: 8px">
+      <h2 style="margin: 0 4px; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">Protections</h2>
+      <div style="border: 1px solid #C7C5D0; border-radius: 16px; overflow: hidden">
+        <div style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; min-height: 72px">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>
+          <a href="Main.dc.html" style="flex: 1; display: flex; flex-direction: column; color: #1B1B21">
+            <span style="font-size: 16px; line-height: 24px">Notification protection</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Checks new notifications for scams</span>
+          </a>
+          <button class="tap" role="switch" aria-checked="true" aria-label="Notification protection" style="width: 52px; height: 32px; border-radius: 16px; border: 0; background: #3451C7; padding: 4px; display: flex; justify-content: flex-end; flex: none">
+            <span style="width: 24px; height: 24px; border-radius: 12px; background: #FFFFFF; color: #3451C7; display: flex; align-items: center; justify-content: center">
+              <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; stroke-width: 2.4"><path d="M5 12l5 5 9-10"></path></svg>
+            </span>
+          </button>
+        </div>
+        <div style="height: 1px; background: #C7C5D0; margin-left: 56px"></div>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 12px 16px; min-height: 72px">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><circle cx="12" cy="12" r="9"></circle><path d="M3 12h18M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"></path></svg>
+          <a href="WebProtection.dc.html" style="flex: 1; display: flex; flex-direction: column; color: #1B1B21">
+            <span style="font-size: 16px; line-height: 24px">Web protection</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Blocks known scam sites in every app</span>
+          </a>
+          <button class="tap" role="switch" aria-checked="true" aria-label="Web protection" style="width: 52px; height: 32px; border-radius: 16px; border: 0; background: #3451C7; padding: 4px; display: flex; justify-content: flex-end; flex: none">
+            <span style="width: 24px; height: 24px; border-radius: 12px; background: #FFFFFF; color: #3451C7; display: flex; align-items: center; justify-content: center">
+              <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="width: 16px; height: 16px; stroke-width: 2.4"><path d="M5 12l5 5 9-10"></path></svg>
+            </span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 8px">
+      <h2 style="margin: 0 4px; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">Check something yourself</h2>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+        <a href="Main.dc.html" class="tap" style="background: #EFEDF4; color: #1B1B21; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-height: 104px">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #3451C7"><path d="M4 5h16v11H8l-4 4z"></path><path d="M8 9h8M8 12h5"></path></svg>
+          <span style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">A message</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Paste what you received</span>
+          </span>
+        </a>
+        <a href="Main.dc.html" class="tap" style="background: #EFEDF4; color: #1B1B21; border-radius: 16px; padding: 16px; display: flex; flex-direction: column; gap: 12px; min-height: 104px">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #3451C7"><rect x="3" y="6" width="18" height="12" rx="2"></rect><path d="M3 10h18M7 15h4"></path></svg>
+          <span style="display: flex; flex-direction: column; gap: 2px">
+            <span style="font-size: 16px; line-height: 24px; font-weight: 500">A payment</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Who you’re paying, and how much</span>
+          </span>
+        </a>
+      </div>
+    </section>
+
+    <section style="display: flex; flex-direction: column; gap: 4px">
+      <div style="display: flex; align-items: center; justify-content: space-between; padding-left: 4px">
+        <h2 style="margin: 0; font-size: 14px; line-height: 20px; font-weight: 500; color: #46464F">Recent</h2>
+        <a href="Main.dc.html" class="tap" style="font-size: 14px; line-height: 20px; font-weight: 500; padding: 14px 12px; border-radius: 20px">See all</a>
+      </div>
+      <ul style="list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column">
+        <li style="display: flex; align-items: center; gap: 16px; padding: 8px 4px; min-height: 64px">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+            <span style="font-size: 16px; line-height: 24px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">fnb-online-verify.co.za</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Website check · Yesterday</span>
+          </span>
+          <span style="font-size: 12px; line-height: 16px; font-weight: 500; background: #FFDAD6; color: #410002; border-radius: 8px; padding: 6px 10px; white-space: nowrap">High risk</span>
+        </li>
+        <li style="display: flex; align-items: center; gap: 16px; padding: 8px 4px; min-height: 64px">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><path d="M4 5h16v11H8l-4 4z"></path><path d="M8 9h8M8 12h5"></path></svg>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+            <span style="font-size: 16px; line-height: 24px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">“Your parcel is held at customs”</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Message · Monday</span>
+          </span>
+          <span style="font-size: 12px; line-height: 16px; font-weight: 500; background: #FFDF9E; color: #261A00; border-radius: 8px; padding: 6px 10px; white-space: nowrap">Suspicious</span>
+        </li>
+        <li style="display: flex; align-items: center; gap: 16px; padding: 8px 4px; min-height: 64px">
+          <svg class="i" viewBox="0 0 24 24" aria-hidden="true" style="color: #46464F"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+            <span style="font-size: 16px; line-height: 24px">takealot.com</span>
+            <span style="font-size: 14px; line-height: 20px; color: #46464F">Website check · 12 Oct</span>
+          </span>
+          <span style="font-size: 12px; line-height: 16px; font-weight: 500; background: #C4EED0; color: #00210D; border-radius: 8px; padding: 6px 10px; white-space: nowrap">No warnings</span>
+        </li>
+      </ul>
+    </section>
+  </main>
+
+  <a href="WebsiteCheck.dc.html" class="tap" style="position: absolute; right: 16px; bottom: 96px; height: 56px; padding: 0 20px 0 16px; border-radius: 16px; background: #DDE1FF; color: #001356; display: flex; align-items: center; gap: 12px; font-size: 14px; line-height: 20px; font-weight: 500; box-shadow: 0 3px 6px rgba(27, 27, 33, .18), 0 1px 3px rgba(27, 27, 33, .12)">
+    <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"></path><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg>
+    Check a link
+  </a>
+
+  <nav aria-label="Main" style="position: absolute; left: 0; right: 0; bottom: 0; height: 80px; background: #EFEDF4; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); padding: 12px 8px 16px">
+    <a href="Main.dc.html" aria-current="page" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #1B1B21">
+      <span style="width: 64px; height: 32px; border-radius: 16px; background: #DFE1F9; color: #171B2C; display: flex; align-items: center; justify-content: center">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 11l8-7 8 7v9h-5v-6H9v6H4z"></path></svg>
+      </span>
+      <span style="font-size: 12px; line-height: 16px; font-weight: 700">Home</span>
+    </a>
+    <a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #46464F">
+      <span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
+      </span>
+      <span style="font-size: 12px; line-height: 16px; font-weight: 500">Activity</span>
+    </a>
+    <a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #46464F">
+      <span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center; position: relative">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 16V11a6 6 0 1 1 12 0v5l1.5 2h-15z"></path><path d="M10 20a2 2 0 0 0 4 0"></path></svg>
+        <span aria-label="2 new" style="position: absolute; top: 0; left: 34px; min-width: 16px; height: 16px; border-radius: 8px; background: #BA1A1A; color: #FFFFFF; font-size: 11px; line-height: 16px; font-weight: 500; text-align: center; padding: 0 4px">2</span>
+      </span>
+      <span style="font-size: 12px; line-height: 16px; font-weight: 500">Alerts</span>
+    </a>
+    <a href="Main.dc.html" style="display: flex; flex-direction: column; align-items: center; gap: 4px; color: #46464F">
+      <span style="width: 64px; height: 32px; display: flex; align-items: center; justify-content: center">
+        <svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"></path><circle cx="16" cy="7" r="2"></circle><circle cx="10" cy="17" r="2"></circle></svg>
+      </span>
+      <span style="font-size: 12px; line-height: 16px; font-weight: 500">Settings</span>
+    </a>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":390,"height":1060}}'>
+class Component extends DCLogic {
+  renderVals() {
+    return {};
+  }
+}
+</script>
+</body>
+</html>

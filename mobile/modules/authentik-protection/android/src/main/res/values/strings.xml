@@ -1,0 +1,4 @@
+<resources>
+  <string name="authentik_protection_service_label">Authentik fraud protection</string>
+  <string name="authentik_vpn_label">Authentik web protection</string>
+</resources>

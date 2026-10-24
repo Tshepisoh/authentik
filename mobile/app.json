@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "Authentik",
+    "slug": "authentik",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "app.authentik.mobile",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0B1220",
+        "foregroundImage": "./assets/android-icon-foreground.png",
+        "backgroundImage": "./assets/android-icon-background.png",
+        "monochromeImage": "./assets/android-icon-monochrome.png"
+      },
+      "predictiveBackGestureEnabled": false,
+      "package": "app.authentik.mobile",
+      "googleServicesFile": "./google-services.json"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-status-bar",
+      "expo-secure-store",
+      [
+        "expo-notifications",
+        {
+          "defaultChannel": "security-alerts"
+        }
+      ],
+      "./plugins/with-share-target",
+      "./plugins/with-notification-listener"
+    ],
+    "scheme": "authentik",
+    "experiments": {
+      "typedRoutes": true
+    },
+    "owner": "tshepiso22",
+    "extra": {
+      "router": {
+        "asyncRoutes": {
+          "web": true
+        }
+      },
+      "eas": {
+        "projectId": "bcad5afb-2d61-4638-b21d-a04958e9d80f"
+      }
+    }
+  }
+}

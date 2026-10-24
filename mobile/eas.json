@@ -1,0 +1,41 @@
+{
+  "cli": {
+    "version": ">= 25.0.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      }
+    },
+    "hosted": {
+      "distribution": "internal",
+      "android": {
+        "buildType": "apk"
+      },
+      "env": {
+        "EXPO_PUBLIC_AUTH_MODE": "firebase",
+        "EXPO_PUBLIC_FIREBASE_API_KEY": "AIzaSyBHyk4gpEQ9I5jkENIuYV3X_Eeg8HBxYRc",
+        "EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN": "authentik-5e5f1.firebaseapp.com",
+        "EXPO_PUBLIC_FIREBASE_PROJECT_ID": "authentik-5e5f1",
+        "EXPO_PUBLIC_FIREBASE_APP_ID": "1:778353909115:web:0185f5f4792e79554bb1de",
+        "EXPO_PUBLIC_API_URL": "https://SET-BY-HOST-SKILL.example"
+      }
+    },
+    "judge": {
+      "extends": "hosted",
+      "env": {
+        "EXPO_PUBLIC_NOTIFICATION_LISTENER": "off"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}

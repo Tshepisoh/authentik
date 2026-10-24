@@ -1,0 +1,27 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-24T12:30:00Z" },
+  "title": "Authentik screens",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 390, "h": 1060, "title": "1 · Home", "is_interactive": true, "radius": 28 },
+    "Warning.dc.html": { "x": 470, "y": 0, "w": 390, "h": 1120, "title": "2 · Warning detail", "is_interactive": true, "radius": 28 },
+    "WebsiteCheck.dc.html": { "x": 940, "y": 0, "w": 390, "h": 1240, "title": "3 · Website check", "is_interactive": true, "radius": 28 },
+    "WebProtection.dc.html": { "x": 1410, "y": 0, "w": 390, "h": 1180, "title": "4 · Web protection", "is_interactive": true, "radius": 28 },
+    "Onboarding.dc.html": { "x": 1880, "y": 0, "w": 390, "h": 900, "title": "5 · First-run setup", "is_interactive": true, "radius": 28 }
+  },
+  "order": ["Main.dc.html", "Warning.dc.html", "WebsiteCheck.dc.html", "WebProtection.dc.html", "Onboarding.dc.html"],
+  "notes": {
+    "heading": { "x": 0, "y": -300, "text": "Authentik · Material 3 screens", "kind": "title1", "maxW": 2270 },
+    "about": {
+      "x": 2350,
+      "y": 0,
+      "w": 360,
+      "text": "Category standard, played straight: Material 3 on Android. Bar: Google Play Protect, Capitec / TymeBank, Bitdefender / Norton. Light theme for daylight use; dark theme comes next. All names, sites and times are examples.",
+      "fill": "blue",
+      "size": "s"
+    }
+  },
+  "designSystems": []
+}
