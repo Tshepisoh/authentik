@@ -1,0 +1,19 @@
+{
+  "v": 3,
+  "createdOnFiles": { "v": 1, "at": "2026-10-24T21:30:00Z" },
+  "title": "Authentik logo options",
+  "launch": { "view": "canvas" },
+  "pages": [],
+  "boards": {
+    "Main.dc.html": { "x": 0, "y": 0, "w": 1120, "h": 600, "title": "1 · Check shield" },
+    "Monogram.dc.html": { "x": 0, "y": 720, "w": 1120, "h": 600, "title": "2 · A-check monogram" },
+    "Seal.dc.html": { "x": 0, "y": 1440, "w": 1120, "h": 600, "title": "3 · Seal of authenticity" },
+    "Message.dc.html": { "x": 0, "y": 2160, "w": 1120, "h": 600, "title": "4 · Checked message" },
+    "Lens.dc.html": { "x": 0, "y": 2880, "w": 1120, "h": 600, "title": "5 · Look closer" }
+  },
+  "order": ["Main.dc.html", "Monogram.dc.html", "Seal.dc.html", "Message.dc.html", "Lens.dc.html"],
+  "notes": {
+    "heading": { "x": 0, "y": -300, "text": "Authentik logo options", "kind": "title1", "maxW": 1120 }
+  },
+  "designSystems": []
+}

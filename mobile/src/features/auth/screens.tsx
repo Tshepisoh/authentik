@@ -1,5 +1,5 @@
 import { useRef, useState, type ComponentRef } from 'react';
-import { TextInput, View } from 'react-native';
+import { Image, TextInput, View } from 'react-native';
 import { useRouter } from 'expo-router';
 import { Button, FactRow, Icon, IconButton, Notice, Screen, Text, TextField } from '@/shared/ui';
 import { useTheme } from '@/shared/ui/theme';
@@ -7,6 +7,8 @@ import { config } from '@/shared/config';
 import { authErrorMessage, identity } from './identity';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+// The app icon (A-check monogram), rendered by mobile/.impeccable/logos/render-icons.mjs.
+const BRAND_ICON = require('../../../assets/brand-icon.png');
 
 export function SignInScreen() {
   const t = useTheme();
@@ -42,9 +44,7 @@ export function SignInScreen() {
   return (
     <Screen edges={['top', 'bottom']} fill>
       <View style={{ gap: t.space.lg, paddingTop: t.space.xxl }}>
-        <View style={{ width: 64, height: 64, borderRadius: 32, backgroundColor: c.primaryContainer, alignItems: 'center', justifyContent: 'center' }}>
-          <Icon name="verified-user" size={32} color={c.onPrimaryContainer} />
-        </View>
+        <Image source={BRAND_ICON} style={{ width: 64, height: 64, borderRadius: 16 }} accessibilityIgnoresInvertColors accessible={false} />
         <View style={{ gap: t.space.sm }}>
           <Text variant="headlineMedium">Authentik</Text>
           <Text variant="bodyLarge" muted>Check payments, messages and links before you trust them.</Text>
