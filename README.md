@@ -75,7 +75,7 @@ docker compose up --build
 | Suite | What it covers |
 |---|---|
 | `packages/shared` | IP classification, the destination policy, DNS rebinding, URL normalisation and redaction |
-| `backend` | Risk rules, impersonation detection, SSRF fetcher against a live local server, every API route, ownership, retention, alerts, all 7 payment scenarios, the Sandbox lifecycle over real WebSockets |
+| `backend` | Risk rules, impersonation detection, SSRF fetcher against a live local server, every API route, ownership, retention, alerts, expected-vs-observed payment checks, the Sandbox lifecycle over real WebSockets |
 | `sandbox-worker` | Egress proxy blocking, lifecycle manager, control-API auth and re-validation |
 | `sandbox-worker` E2E | Real Chromium: isolation self-test, screencast, and in-page fetches to metadata and loopback blocked. Run with `SANDBOX_E2E=1 npm test -w @authentik/sandbox-worker`. |
 | `mobile` | `npm run typecheck`; `npx expo export --platform android` to verify bundling |

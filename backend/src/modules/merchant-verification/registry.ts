@@ -14,8 +14,6 @@ export interface KnownEntity {
   recipientNames?: string[];
   /** Merchants only: payment providers this merchant is known to use. */
   paymentProviders?: string[];
-  /** Simulation-only entities used by the demo checkout. */
-  demo?: boolean;
   /** Other ways the name appears in messages, lowercase (sent to phones for offline checks). */
   aliases?: string[];
 }
@@ -67,15 +65,6 @@ export const KNOWN_ENTITIES: KnownEntity[] = [
   { id: 'capitec', name: 'Capitec', kind: 'bank', domains: ['capitecbank.co.za', 'capitec.co.za'], brandTokens: ['capitec', 'capitecbank'] },
   { id: 'discovery', name: 'Discovery Bank', kind: 'bank', domains: ['discovery.co.za'], brandTokens: ['discoverybank'] },
   { id: 'tymebank', name: 'TymeBank', kind: 'bank', domains: ['tymebank.co.za'], brandTokens: ['tymebank'], aliases: ['tyme bank'] },
-
-  // ── Demo-only (simulated checkout; .test never resolves on the public internet) ──
-  {
-    id: 'demo-store', name: 'Authentik Demo Store', kind: 'merchant', demo: true,
-    domains: ['authentik-demo.test'], brandTokens: ['authentikdemo'],
-    recipientNames: ['authentik demo store', 'authentik demo store (pty) ltd'],
-    paymentProviders: ['payfast', 'demo-pay'],
-  },
-  { id: 'demo-pay', name: 'DemoPay', kind: 'payment_provider', demo: true, domains: ['demopay.test'], brandTokens: ['demopay'] },
 ];
 
 export class EntityRegistry {

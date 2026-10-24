@@ -93,9 +93,6 @@ export function apiRoutes(deps: Deps): Router {
   });
 
   // ── Payment integrity ──
-  r.get('/payment-checks/scenarios', (_req, res) => {
-    res.json(payments.scenarios());
-  });
   // Reads the amount and recipient from a payment page, rendered in the isolated worker.
   r.post('/payment-checks/extract', rateLimits.paymentChecks(), async (req, res) => {
     const body = parse(extractBody, req.body);

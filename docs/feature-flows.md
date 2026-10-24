@@ -104,9 +104,9 @@ flowchart TD
   I & K & L --> M[Show evidence and next steps] --> N[User verifies independently before authorising]
 ```
 
-Implemented in `backend/src/modules/payment-integrity/service.ts`. The MVP uses a **simulated
-checkout** (seven scenarios on reserved `.test` domains) or details the user types in. It cannot
-see inside third-party apps.
+Implemented in `backend/src/modules/payment-integrity/service.ts`. It compares what the user
+expected with what the payment page shows: read from the page in the isolated worker, or typed in
+by the user. It cannot see inside third-party apps.
 
 | Check | Finding codes |
 |---|---|

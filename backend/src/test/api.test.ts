@@ -133,13 +133,28 @@ describe('payment integrity', () => {
     incomplete: 'inconclusive',
   };
 
-  it.each(Object.entries(expectations))('demo scenario %s → %s', async (id, verdict) => {
+  // Fixtures: a R1,299 Takealot order paid through PayU, and variations of what the payment page shows.
+  const expected = { merchant: 'takealot', amountMinor: 129_900, currency: 'ZAR', allowedAdjustmentMinor: 9_900 };
+  const cart = 'https://www.takealot.com/cart/checkout';
+  const payu = 'https://secure.payu.co.za/rpp.do';
+  const page = (checkoutUrl: string, more: Record<string, unknown> = {}) => ({
+    expected,
+    observed: { checkoutUrl, redirectChain: [cart, checkoutUrl], recipientName: 'Takealot Online (RF) (Pty) Ltd', amountMinor: 129_900, currency: 'ZAR', ...more },
+  });
+  const cases: Record<string, object> = {
+    legitimate: page(payu),
+    'shipping-fee': page(payu, { amountMinor: 135_900 }),
+    'amount-tampered': page(payu, { amountMinor: 189_900 }),
+    'recipient-swapped': page(payu, { recipientName: 'QuickPay Holdings' }),
+    'lookalike-redirect': page('https://secure.takea1ot.com/pay'),
+    'unknown-processor': page('https://checkout.fastgatewaypay.example/pay'),
+    incomplete: { expected, observed: { checkoutUrl: payu, redirectChain: [cart, payu] } },
+  };
+
+  it.each(Object.entries(expectations))('payment page %s → %s', async (id, verdict) => {
     const { app } = harness();
-    const scenarios = (await request(app).get('/v1/payment-checks/scenarios').set(as('p')).expect(200)).body;
-    const scenario = scenarios.find((s: { id: string }) => s.id === id);
-    const res = await request(app).post('/v1/payment-checks').set(as('p')).send(scenario.request).expect(201);
+    const res = await request(app).post('/v1/payment-checks').set(as('p')).send(cases[id]).expect(201);
     expect(res.body.verdict).toBe(verdict);
-    expect(res.body.payment.simulated).toBe(true);
   });
 
   it('accepts a legitimate redirect to the merchant’s payment provider', async () => {
@@ -190,7 +205,7 @@ describe('payment integrity', () => {
       .set(as('p'))
       .send({
         expected: { merchant: 'Corner Spaza', amountMinor: 1000, currency: 'ZAR' },
-        observed: { checkoutUrl: 'https://pay.demopay.test/x', recipientName: 'Corner Spaza', amountMinor: 1000, currency: 'ZAR' },
+        observed: { checkoutUrl: 'https://pay.yoco.com/corner-spaza', recipientName: 'Corner Spaza', amountMinor: 1000, currency: 'ZAR' },
       })
       .expect(201);
     expect(res.body.verdict).toBe('inconclusive');
@@ -292,10 +307,9 @@ describe('reading payment details from the page', () => {
     expect(res.body.error.code).toBe('extraction_expired');
   });
 
-  it('refuses blocked and simulated addresses, and fails closed without the worker', async () => {
+  it('refuses blocked addresses, and fails closed without the worker', async () => {
     const { app } = harness({ worker: worker() as never });
     await request(app).post('/v1/payment-checks/extract').set(as('x')).send({ checkoutUrl: 'http://10.0.0.5/pay' }).expect(403);
-    await request(app).post('/v1/payment-checks/extract').set(as('x')).send({ checkoutUrl: 'https://pay.demopay.test/x' }).expect(400);
     const noWorker = harness();
     const res = await request(noWorker.app).post('/v1/payment-checks/extract').set(as('x')).send({ checkoutUrl: 'https://secure.payu.co.za/rpp.do' }).expect(503);
     expect(res.body.error.code).toBe('extraction_unavailable');

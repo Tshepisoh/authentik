@@ -69,15 +69,12 @@ export class ThreatListService {
   }
 
   private brands(): BrandEntry[] {
-    const includeDemo = this.deps.config.NODE_ENV !== 'production';
-    return this.deps.registry.entities
-      .filter((e) => includeDemo || !e.demo)
-      .map((e) => ({
-        name: e.name,
-        isBank: e.kind === 'bank',
-        domains: e.domains,
-        brandTokens: e.brandTokens,
-        mentions: [...new Set([e.name.toLowerCase(), ...(e.aliases ?? [])])],
-      }));
+    return this.deps.registry.entities.map((e) => ({
+      name: e.name,
+      isBank: e.kind === 'bank',
+      domains: e.domains,
+      brandTokens: e.brandTokens,
+      mentions: [...new Set([e.name.toLowerCase(), ...(e.aliases ?? [])])],
+    }));
   }
 }

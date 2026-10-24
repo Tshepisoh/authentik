@@ -55,7 +55,7 @@ Code: `VpnProtectionService.kt`, `dns/` (packets and policy), `web-protection-sc
 
 ### Phase 3 device checklist
 1. Turn on; browse normally for 10 minutes. Pages load; the lookup count rises; battery use in Settings › Battery stays small.
-2. Sync the threat list (open the app online), then open `http://takealot-deals.test` in Chrome. It's on the demo list, so the VPN answers NXDOMAIN before any real lookup and one "Blocked a known scam site" notification appears. Open `fnb-verify.co.za`: it loads (or fails normally) and a look-alike warning appears.
+2. Sync the threat list (open the app online), then open a domain that is on the threat list (from `THREAT_FEED_URLS` or the `BLOCKLIST_PATH` file) in Chrome. The VPN answers NXDOMAIN before any real lookup and one "Blocked a known scam site" notification appears. Open `fnb-verify.co.za`: it loads (or fails normally) and a look-alike warning appears.
 3. Turn on another VPN app: Authentik shows "stopped" with the reason. Turn Authentik on again: the other VPN disconnects.
 4. Set Private DNS to a hostname: the warning names it. Set it back to Automatic: lookups are counted again.
 5. Force-stop isn't a fair test (it disables restarts); instead kill the process with `adb shell am kill app.authentik.mobile` and check it comes back.
@@ -78,5 +78,5 @@ These came from the original blueprint and stay in the codebase.
 - 🟡 Website scanning: Safe Browsing, a local blocklist, RDAP age, page evidence, look-alike detection
 - ✅ Evidence-based risk engine with explanations (`modules/risk-engine`)
 - ✅ Isolated Sandbox browsing (`sandbox-worker/`): per-session Chromium, egress proxy, screencast, cleanup
-- ✅ Payment-integrity checks: 7 scenarios, expected-vs-observed comparison, extraction from pages
+- ✅ Payment-integrity checks: expected-vs-observed comparison, extraction from pages
 - ✅ Report history, privacy controls, alerts and FCM push

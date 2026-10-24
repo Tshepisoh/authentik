@@ -217,16 +217,8 @@ export interface PaymentCheckDetail {
   merchantId: string | null;
   merchantName: string;
   paymentProvider: string | null;
-  simulated: boolean;
   /** Whether the recipient and amount were read from the page, typed by the user, or both and they agree. */
   observedSource?: { recipient: ObservedSource; amount: ObservedSource };
-}
-
-export interface DemoScenario {
-  id: string;
-  title: string;
-  description: string;
-  request: PaymentCheckRequest;
 }
 
 // ── Sandbox ──────────────────────────────────────────────────────────────

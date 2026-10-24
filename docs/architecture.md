@@ -64,7 +64,7 @@ backend/src/
 │   ├── scans/                 orchestration + lookalike, domain signals, RDAP, page evidence
 │   ├── reputation/            Google Safe Browsing, local blocklist
 │   ├── merchant-verification/ registry of merchants, payment providers and banks
-│   ├── payment-integrity/     expected-vs-observed comparison, demo checkout scenarios
+│   ├── payment-integrity/     expected-vs-observed comparison, page extraction
 │   ├── risk-engine/           deterministic verdict rules + explanation text
 │   ├── reports/               create/list/get/delete with retention
 │   ├── notifications/         alert policy, dedupe, FCM push
@@ -150,7 +150,7 @@ its owner** (sticky routing on the session id) or move the relay to a dedicated 
 | `POST /domains/analyze` | Hostname or URL check for phones → `DomainAnalysis` (not stored) |
 | `POST /notifications/analyze` | Finding codes + link hosts → one `notification` assessment (not stored, no text) |
 | `GET /threats/updates[?since=]` | Threat list and brands for offline checks, as a full list or a delta |
-| `GET /payment-checks/scenarios` · `POST /payment-checks` | Demo scenarios; expected-vs-observed check → `Report` |
+| `POST /payment-checks` | Expected-vs-observed check → `Report` |
 | `POST /payment-checks/extract` | Read the amount and recipient from a payment page (by URL or from a live Sandbox session), rendered in the isolated worker |
 | `GET /reports` · `GET /reports/:id` · `DELETE /reports/:id` | History (summaries), detail, deletion (including its alerts) |
 | `GET /alerts[?unreviewed=true]` · `POST /alerts/:id/review` | Alerts |

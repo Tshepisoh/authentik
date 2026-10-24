@@ -34,7 +34,7 @@ export const isThreatListSource = <T,>(p: T): p is T & ThreatListSource =>
  * Google Safe Browsing v4 Lookup API.
  *
  * Free, with no billing account. Google's terms limit it to non-commercial use,
- * which covers the current demo stage. A commercial launch needs a commercial
+ * which covers the current testing stage. A commercial launch needs a commercial
  * provider (e.g. Google Web Risk, which needs billing), added as another
  * `ReputationProvider`.
  *
@@ -81,7 +81,7 @@ export class SafeBrowsingProvider implements ReputationProvider {
   }
 }
 
-/** Curated local list (known-bad domains from incident reports, plus demo entries). Low coverage, so not critical. */
+/** Curated local list (known-bad domains from incident reports, loaded from BLOCKLIST_PATH). Low coverage, so not critical. */
 export class LocalBlocklistProvider implements ReputationProvider, ThreatListSource {
   readonly id = 'local_blocklist';
   readonly label = 'Authentik blocklist';
@@ -95,7 +95,7 @@ export class LocalBlocklistProvider implements ReputationProvider, ThreatListSou
       .map((l) => l.replace(/^https?:\/\//, '').split('/')[0]!);
   }
 
-  static fromFile(path: string | undefined, builtIn: string[] = DEMO_BLOCKLIST): LocalBlocklistProvider {
+  static fromFile(path: string | undefined, builtIn: string[] = []): LocalBlocklistProvider {
     const extra = path ? readFileSync(path, 'utf8').split(/\r?\n/) : [];
     return new LocalBlocklistProvider([...builtIn, ...extra]);
   }
@@ -204,8 +204,6 @@ export function parseFeed(text: string): string[] {
   return out;
 }
 
-/** Reserved `.test` names used by the demo; they cannot exist on the public internet. */
-export const DEMO_BLOCKLIST = ['takealot-deals.test', 'secure-payfast-verify.test', 'fnb-online-verify.test'];
 
 const THREAT_LABELS: Record<string, string> = {
   MALWARE: 'malware',

@@ -132,7 +132,6 @@ function claimedEntity(title: string, registry: EntityRegistry) {
   const compact = normalizeName(title);
   return registry.entities.find(
     (e) =>
-      !e.demo &&
       (e.brandTokens.some((t) => t.length >= 5 && compact.includes(t)) ||
         new RegExp(`\\b${escapeRe(e.name.toLowerCase())}\\b`).test(words)),
   );

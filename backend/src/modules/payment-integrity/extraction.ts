@@ -1,11 +1,10 @@
-import { publicSuffix, redactUrl, type PaymentExtractRequest, type PaymentExtraction } from '@authentik/shared';
-import { badRequest, forbidden, HttpError, unavailable } from '../../lib/errors.js';
+import { redactUrl, type PaymentExtractRequest, type PaymentExtraction } from '@authentik/shared';
+import { forbidden, HttpError, unavailable } from '../../lib/errors.js';
 import { newId, type Clock } from '../../lib/ids.js';
 import type { AuditLog } from '../../security/audit/index.js';
 import { validateTargetUrl } from '../../security/url-validation/index.js';
 import { WorkerUnavailableError, type SandboxWorker, type WorkerExtraction } from '../../sandbox-control/workers/client.js';
 import type { SandboxService } from '../../sandbox-control/sessions/service.js';
-import { RESERVED_TLDS } from '../scans/domain-signals.js';
 
 const TTL_MS = 10 * 60_000;
 const MAX_PER_USER = 20;
@@ -69,10 +68,6 @@ export class PaymentExtractionService {
   private async fromUrl(input: string): Promise<WorkerExtraction> {
     const target = validateTargetUrl(input);
     if (!target.allowed) throw forbidden('target_blocked', target.blockMessage);
-    const tld = (publicSuffix(target.url.hostname) ?? '').split('.').pop() ?? '';
-    if (RESERVED_TLDS.has(tld)) {
-      throw badRequest('simulated_checkout', 'This is a simulated checkout. Its details are part of the demo scenario.');
-    }
     const { worker } = this.deps;
     if (!worker.configured || !worker.extractFromUrl) {
       throw unavailable('extraction_unavailable', 'Reading the page needs the Sandbox, which isn’t available right now. Enter the details yourself.');

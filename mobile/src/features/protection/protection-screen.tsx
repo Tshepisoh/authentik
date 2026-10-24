@@ -14,7 +14,6 @@ import { useTheme, verdictColors } from '@/shared/ui/theme';
 import { useProtection } from './use-protection';
 import { OnlineCheck } from './online-check';
 
-const SAMPLE = 'Payment successful. You have received R4,500.00. Release the item now.';
 
 /** Explains notification access before sending the user to Android Settings. */
 export function AccessExplainer({ onOpen }: { onOpen: () => void }) {
@@ -182,8 +181,8 @@ function SampleChecker({ initialText }: { initialText: string }) {
   return (
     <Section title="Check a message yourself">
       <Card>
-        <TextField label="Title (optional)" value={title} onChangeText={setTitle} placeholder="Payment successful" />
-        <TextField label="Message" value={text} onChangeText={setText} placeholder={SAMPLE} multiline style={{ minHeight: 88, textAlignVertical: 'top' }} />
+        <TextField label="Title (optional)" value={title} onChangeText={setTitle} />
+        <TextField label="Message" value={text} onChangeText={setText} placeholder="Paste the message here" multiline style={{ minHeight: 88, textAlignVertical: 'top' }} />
         <Button
           kind="secondary"
           title="Check this text"
@@ -212,7 +211,7 @@ function SampleChecker({ initialText }: { initialText: string }) {
             <OnlineCheck
               key={result.linkHosts.join(',') + result.reasons.map((r) => r.code).join(',')}
               request={{
-                packageName: 'app.authentik.sample',
+                packageName: 'app.authentik.pasted',
                 findingCodes: result.reasons.map((r) => r.code),
                 linkHosts: result.linkHosts.slice(0, 5),
                 localRulesVersion: result.rulesVersion,

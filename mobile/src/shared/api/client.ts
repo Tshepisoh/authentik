@@ -1,7 +1,6 @@
 import type {
   Alert,
   CreateSandboxSessionRequest,
-  DemoScenario,
   DomainAnalysis,
   DomainAnalyzeRequest,
   NotificationAnalysis,
@@ -73,7 +72,6 @@ export const api = {
   threatUpdates: (since?: string) =>
     call<ThreatListUpdate>('GET', `/v1/threats/updates${since ? `?since=${encodeURIComponent(since)}` : ''}`),
 
-  paymentScenarios: () => call<DemoScenario[]>('GET', '/v1/payment-checks/scenarios'),
   paymentCheck: (req: PaymentCheckRequest) => call<Report>('POST', '/v1/payment-checks', req),
   extractPayment: (req: PaymentExtractRequest) => call<PaymentExtraction>('POST', '/v1/payment-checks/extract', req),
 

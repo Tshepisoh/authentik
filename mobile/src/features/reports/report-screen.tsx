@@ -81,7 +81,7 @@ const SOURCE_TEXT = {
 function PaymentSummary({ report }: { report: Report }) {
   const p = report.payment!;
   return (
-    <Section title={p.simulated ? 'Payment (simulated checkout)' : 'Payment'}>
+    <Section title="Payment">
       <Card>
         <Text variant="small">Expected: {p.merchantName} · {money(p.expected.amountMinor, p.expected.currency)}</Text>
         <Text variant="small">

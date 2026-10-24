@@ -1,6 +1,5 @@
 import {
   normalizeTargetUrl,
-  publicSuffix,
   redactUrl,
   registrableDomain,
   type CheckRun,
@@ -21,9 +20,7 @@ import { normalizeName } from '../merchant-verification/registry.js';
 import type { ReportService } from '../reports/service.js';
 import type { AlertService } from '../notifications/service.js';
 import { analyzeImpersonation } from '../scans/lookalike.js';
-import { RESERVED_TLDS } from '../scans/domain-signals.js';
 import type { PageFetcher } from '../scans/service.js';
-import { DEMO_SCENARIOS } from './scenarios.js';
 import type { PaymentExtractionService } from './extraction.js';
 import { badRequest } from '../../lib/errors.js';
 
@@ -48,16 +45,11 @@ export class PaymentIntegrityService {
     },
   ) {}
 
-  scenarios() {
-    return DEMO_SCENARIOS;
-  }
-
   async check(uid: string, input: PaymentCheckRequest): Promise<ReportDoc> {
     const { registry } = this.deps;
     const { req, checkoutUrl, observedSource, contradictions } = this.resolveObserved(uid, input);
     const target = validateTargetUrl(checkoutUrl);
     const merchant = registry.findMerchant(req.expected.merchant);
-    const simulated = isSimulated(target.url);
 
     const detail: PaymentCheckDetail = {
       expected: req.expected,
@@ -67,7 +59,6 @@ export class PaymentIntegrityService {
       merchantId: merchant?.id ?? null,
       merchantName: merchant?.name ?? req.expected.merchant,
       paymentProvider: null,
-      simulated,
       observedSource,
     };
 
@@ -99,7 +90,7 @@ export class PaymentIntegrityService {
     }
 
     // 2. Redirect chain
-    const { hops, chainCheck } = await this.observeChain(req, target.url, simulated);
+    const { hops, chainCheck } = await this.observeChain(req, target.url);
     checks.push(chainCheck);
     const hosts = [...new Set(hops.map((h) => h.hostname))];
     // Judge each organisation once: payfast.co.za → payfast.io is one provider, not two signals.
@@ -114,7 +105,7 @@ export class PaymentIntegrityService {
     }
 
     // 3. Reputation of every non-official hop. Useful but not what this check is about, so not critical here.
-    const toCheck = hosts.filter((h) => !registry.ownerOf(h) && !isSimulatedHost(h));
+    const toCheck = hosts.filter((h) => !registry.ownerOf(h));
     for (const host of toCheck) {
       const rep = await this.deps.reputation.check(new URL(`https://${host}/`));
       findings.push(...rep.findings);
@@ -197,10 +188,10 @@ export class PaymentIntegrityService {
     return { req, checkoutUrl, observedSource: { recipient, amount }, contradictions };
   }
 
-  private async observeChain(req: PaymentCheckRequest, checkout: URL, simulated: boolean) {
+  private async observeChain(req: PaymentCheckRequest, checkout: URL) {
     const supplied = req.observed.redirectChain;
-    if (supplied?.length || simulated) {
-      const urls = (supplied?.length ? supplied : [checkout.href])
+    if (supplied?.length) {
+      const urls = supplied
         .map((u) => normalizeTargetUrl(u))
         .filter((r) => r.ok)
         .map((r) => (r as { url: URL }).url);
@@ -209,7 +200,7 @@ export class PaymentIntegrityService {
       const hops: RedirectHop[] = urls.map((u) => ({
         url: redactUrl(u), hostname: u.hostname, status: null, crossDomain: registrableDomain(u.hostname) !== start,
       }));
-      return { hops, chainCheck: { check: 'payment_redirects', status: 'completed', critical: true, detail: simulated ? 'simulated checkout' : 'chain supplied by client' } satisfies CheckRun };
+      return { hops, chainCheck: { check: 'payment_redirects', status: 'completed', critical: true, detail: 'chain supplied by client' } satisfies CheckRun };
     }
 
     const res = await this.deps.fetcher.fetch(checkout, {
@@ -366,11 +357,6 @@ export class PaymentIntegrityService {
     return out;
   }
 }
-
-function isSimulatedHost(host: string) {
-  return RESERVED_TLDS.has((publicSuffix(host) ?? '').split('.').pop() ?? '');
-}
-const isSimulated = (url: URL) => isSimulatedHost(url.hostname);
 
 function money(minor: number, currency: string) {
   try {
