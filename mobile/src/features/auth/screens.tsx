@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { Button, FactRow, Icon, IconButton, Notice, Screen, Text, TextField } from '@/shared/ui';
 import { useTheme } from '@/shared/ui/theme';
 import { config } from '@/shared/config';
+import { LegalSheet, type LegalDoc } from '@/features/legal/legal-screens';
 import { authErrorMessage, identity } from './identity';
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -23,6 +24,7 @@ export function SignInScreen() {
   const [fieldError, setFieldError] = useState<{ email?: string; password?: string }>({});
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [legal, setLegal] = useState<LegalDoc | null>(null);
   const passwordRef = useRef<ComponentRef<typeof TextInput>>(null);
 
   const submit = async () => {
@@ -108,11 +110,29 @@ export function SignInScreen() {
       </View>
 
       <View style={{ flex: 1 }} />
-      <View style={{ flexDirection: 'row', gap: t.space.sm, alignItems: 'center', justifyContent: 'center' }}>
-        <Icon name="lock-outline" size={16} color={c.authMuted} />
-        <Text variant="bodySmall" color={c.authMuted}>Authentik never sees your password.</Text>
+      <View style={{ gap: t.space.md }}>
+        <LegalLine action="signing in" onOpen={setLegal} />
+        <View style={{ flexDirection: 'row', gap: t.space.sm, alignItems: 'center', justifyContent: 'center' }}>
+          <Icon name="lock-outline" size={16} color={c.authMuted} />
+          <Text variant="bodySmall" color={c.authMuted}>Authentik never sees your password.</Text>
+        </View>
       </View>
+      <LegalSheet doc={legal} onClose={() => setLegal(null)} />
     </Screen>
+  );
+}
+
+/** "By signing in you agree to…" with links that open the terms and policy (no sign-in needed). */
+function LegalLine({ action, onOpen }: { action: string; onOpen: (doc: LegalDoc) => void }) {
+  const t = useTheme();
+  const link = { color: t.colors.primary, fontWeight: '500' as const, textDecorationLine: 'underline' as const };
+  return (
+    <Text variant="bodySmall" color={t.colors.authMuted} style={{ textAlign: 'center' }}>
+      By {action} you agree to the{' '}
+      <Text variant="bodySmall" style={link} accessibilityRole="link" onPress={() => onOpen('terms')}>Terms of Service</Text>
+      {' '}and{' '}
+      <Text variant="bodySmall" style={link} accessibilityRole="link" onPress={() => onOpen('privacy')}>Privacy Policy</Text>.
+    </Text>
   );
 }
 
@@ -138,6 +158,7 @@ export function RegisterScreen() {
   const [fieldError, setFieldError] = useState<{ email?: string; password?: string; confirm?: string }>({});
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [legal, setLegal] = useState<LegalDoc | null>(null);
   const passwordRef = useRef<ComponentRef<typeof TextInput>>(null);
   const confirmRef = useRef<ComponentRef<typeof TextInput>>(null);
 
@@ -243,6 +264,7 @@ export function RegisterScreen() {
         {error ? <Notice tone="danger">{error}</Notice> : null}
 
         <View style={{ gap: t.space.sm }}>
+          <LegalLine action="creating an account" onOpen={setLegal} />
           <Button title="Create account" onPress={submit} loading={busy} />
           <Button kind="ghost" title="I already have an account" onPress={() => router.back()} />
         </View>
@@ -253,6 +275,7 @@ export function RegisterScreen() {
         <Icon name="lock-outline" size={18} color={c.authMuted} />
         <Text variant="bodySmall" color={c.authMuted} style={{ flex: 1 }}>Your password is handled by our sign-in provider. Authentik never sees it.</Text>
       </View>
+      <LegalSheet doc={legal} onClose={() => setLegal(null)} />
     </Screen>
   );
 }
