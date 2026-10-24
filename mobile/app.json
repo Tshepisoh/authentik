@@ -40,7 +40,16 @@
         }
       ],
       "./plugins/with-share-target",
-      "./plugins/with-notification-listener"
+      "./plugins/with-notification-listener",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#3451C7",
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 200,
+          "resizeMode": "contain"
+        }
+      ]
     ],
     "scheme": "authentik",
     "experiments": {

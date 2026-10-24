@@ -19,7 +19,9 @@ const icons = [
   { file: 'android-icon-foreground.png', size: 1024, markPx: 500, bg: null },
   { file: 'android-icon-background.png', size: 1024, markPx: 0, bg: BLUE, radius: 0 },
   { file: 'android-icon-monochrome.png', size: 1024, markPx: 500, bg: null },
-  { file: 'splash-icon.png', size: 1024, markPx: 600, bg: BLUE, radius: 232 },
+  // Splash (brand blue): white mark on transparent; app.json sets the blue background. Sized to
+  // stay inside the circle Android 12+ crops the splash icon to.
+  { file: 'splash-icon.png', size: 1024, markPx: 640, bg: null, width: 6.5 },
   { file: 'favicon.png', size: 48, markPx: 32, bg: BLUE, radius: 12, width: 8 },
   { file: 'notification-icon.png', size: 96, markPx: 88, bg: null, width: 8 },
   // White on transparent; the app tints it (Image tintColor) per theme.
