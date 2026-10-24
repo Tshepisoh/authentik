@@ -110,23 +110,45 @@ export function SignInScreen() {
   );
 }
 
+/** Live password requirements: a filled check when met, an empty circle until then. */
+function Requirement({ met, label }: { met: boolean; label: string }) {
+  const t = useTheme();
+  return (
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: t.space.sm }} accessible accessibilityLabel={`${label}: ${met ? 'done' : 'not yet'}`}>
+      <Icon name={met ? 'check-circle' : 'radio-button-unchecked'} size={18} color={met ? t.colors.ok : t.colors.onSurfaceVariant} />
+      <Text variant="bodyMedium" muted={!met}>{label}</Text>
+    </View>
+  );
+}
+
 export function RegisterScreen() {
+  const t = useTheme();
+  const c = t.colors;
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirm, setConfirm] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [fieldError, setFieldError] = useState<{ email?: string; password?: string; confirm?: string }>({});
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const passwordRef = useRef<ComponentRef<typeof TextInput>>(null);
+  const confirmRef = useRef<ComponentRef<typeof TextInput>>(null);
+
+  const checkPassword = config.authMode !== 'dev';
+  const longEnough = password.length >= 8;
+  const lettersAndNumbers = /\d/.test(password) && /[A-Za-z]/.test(password);
 
   const submit = async () => {
-    if (!EMAIL_RE.test(email.trim())) return setError('Enter a valid email address.');
-    if (config.authMode !== 'dev') {
-      if (password.length < 8 || !/\d/.test(password) || !/[A-Za-z]/.test(password)) {
-        return setError('Use at least 8 characters with both letters and numbers.');
-      }
-      if (password !== confirm) return setError('The passwords don’t match.');
-    }
-    setBusy(true);
+    const problems = {
+      email: EMAIL_RE.test(email.trim()) ? undefined : 'Enter a valid email address.',
+      password: checkPassword && !(longEnough && lettersAndNumbers) ? 'Use at least 8 characters with both letters and numbers.' : undefined,
+      confirm: checkPassword && password !== confirm ? 'The passwords don’t match.' : undefined,
+    };
+    setFieldError(problems);
     setError(null);
+    if (problems.email || problems.password || problems.confirm) return;
+    setBusy(true);
     try {
       await identity.register(email, password);
     } catch (e) {
@@ -136,14 +158,89 @@ export function RegisterScreen() {
     }
   };
 
+  const clear = (field: 'email' | 'password' | 'confirm') => {
+    if (fieldError[field]) setFieldError({ ...fieldError, [field]: undefined });
+  };
+
   return (
-    <Screen>
-      <Text muted>We only ask for an email address. Your password is handled by our sign-in provider — Authentik never sees it.</Text>
-      <TextField label="Email" value={email} onChangeText={setEmail} autoCapitalize="none" autoComplete="email" keyboardType="email-address" />
-      <TextField label="Password" value={password} onChangeText={setPassword} secureTextEntry autoComplete="new-password" textContentType="newPassword" hint="At least 8 characters, letters and numbers." />
-      <TextField label="Confirm password" value={confirm} onChangeText={setConfirm} secureTextEntry autoComplete="new-password" />
-      {error ? <Notice tone="danger">{error}</Notice> : null}
-      <Button title="Create account" onPress={submit} loading={busy} />
+    <Screen fill>
+      <View style={{ gap: t.space.sm }}>
+        <Text variant="headlineSmall">Create your account</Text>
+        <Text variant="bodyLarge" muted>An email address and a password are all we need.</Text>
+      </View>
+
+      <View style={{ gap: t.space.lg }}>
+        <TextField
+          label="Email"
+          value={email}
+          onChangeText={(v) => { setEmail(v); clear('email'); }}
+          error={fieldError.email}
+          hint="We’ll send a link to confirm it, so you can recover your account."
+          autoCapitalize="none"
+          autoComplete="email"
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          returnKeyType="next"
+          onSubmitEditing={() => passwordRef.current?.focus()}
+        />
+
+        <View style={{ gap: t.space.md }}>
+          <TextField
+            ref={passwordRef}
+            label="Password"
+            value={password}
+            onChangeText={(v) => { setPassword(v); clear('password'); }}
+            error={fieldError.password}
+            secureTextEntry={!showPassword}
+            autoCapitalize="none"
+            autoComplete="new-password"
+            textContentType="newPassword"
+            returnKeyType="next"
+            onSubmitEditing={() => confirmRef.current?.focus()}
+            trailing={
+              <IconButton
+                name={showPassword ? 'visibility-off' : 'visibility'}
+                label={showPassword ? 'Hide passwords' : 'Show passwords'}
+                onPress={() => setShowPassword(!showPassword)}
+                color={c.onSurfaceVariant}
+              />
+            }
+          />
+          {checkPassword ? (
+            <View style={{ gap: t.space.xs, paddingLeft: 4 }}>
+              <Requirement met={longEnough} label="At least 8 characters" />
+              <Requirement met={lettersAndNumbers} label="Letters and numbers" />
+            </View>
+          ) : null}
+        </View>
+
+        <TextField
+          ref={confirmRef}
+          label="Confirm password"
+          value={confirm}
+          onChangeText={(v) => { setConfirm(v); clear('confirm'); }}
+          error={fieldError.confirm}
+          secureTextEntry={!showPassword}
+          autoCapitalize="none"
+          autoComplete="new-password"
+          textContentType="newPassword"
+          returnKeyType="go"
+          onSubmitEditing={submit}
+        />
+
+        {error ? <Notice tone="danger">{error}</Notice> : null}
+
+        <View style={{ gap: t.space.sm }}>
+          <Button title="Create account" onPress={submit} loading={busy} />
+          <Button kind="ghost" title="I already have an account" onPress={() => router.back()} />
+        </View>
+      </View>
+
+      <View style={{ flex: 1 }} />
+      <View style={{ flexDirection: 'row', gap: t.space.sm, alignItems: 'flex-start' }}>
+        <Icon name="lock-outline" size={18} color={c.onSurfaceVariant} />
+        <Text variant="bodySmall" muted style={{ flex: 1 }}>Your password is handled by our sign-in provider. Authentik never sees it.</Text>
+      </View>
     </Screen>
   );
 }
