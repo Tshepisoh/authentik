@@ -26,6 +26,8 @@ export interface BrowserSessionOptions {
 
 /** Max ~12 frames/s to the viewer: smooth enough for browsing, ~75% less than an animated page produces. */
 const FRAME_INTERVAL_MS = 80;
+/** A move to another site this soon after a tap, key or navigation counts as the user's own. */
+const USER_NAVIGATION_WINDOW_MS = 8000;
 
 const MOBILE_UA =
   'Mozilla/5.0 (Linux; Android 14; Pixel 8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Mobile Safari/537.36';
@@ -183,7 +185,8 @@ export class BrowserSession {
       const host = safeHost(url);
       const domain = registrableDomain(host);
       if (this.currentDomain && domain !== this.currentDomain) {
-        const userInitiated = Date.now() - this.lastInputAt < 2000;
+        // A tap on a slow page can take several seconds to navigate; that's still the user's doing.
+        const userInitiated = Date.now() - this.lastInputAt < USER_NAVIGATION_WINDOW_MS;
         this.event({
           type: userInitiated ? 'navigation' : 'cross_domain_redirect',
           target: host,

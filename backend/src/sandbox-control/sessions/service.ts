@@ -334,7 +334,7 @@ export class SandboxService {
 
     const doc = await store.sandboxSessions.get(session.id);
     const failed = FAILURE_REASONS.has(reason);
-    const findings = findingsFromEvents(session.events);
+    const findings = findingsFromEvents(session.events, doc?.hostname);
     if (failed) {
       findings.push(finding({
         code: reason === 'isolation_failure' ? 'isolation_failure' : 'sandbox_session_failed',

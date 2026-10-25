@@ -1,7 +1,8 @@
 import { z } from 'zod';
-import { SANDBOX_ALLOWED_KEYS, type Finding, type SandboxEvent, type SandboxEventType, type Verdict } from '@authentik/shared';
+import { SANDBOX_ALLOWED_KEYS, isSameOrSubdomain, registrableDomain, type Finding, type SandboxEvent, type SandboxEventType, type Verdict } from '@authentik/shared';
 import { conflict, forbidden } from '../../lib/errors.js';
 import { finding } from '../../modules/risk-engine/engine.js';
+import { EntityRegistry } from '../../modules/merchant-verification/registry.js';
 
 /** Decides whether a Sandbox may open a target, given its preliminary scan. */
 export function preflight(verdict: Verdict, acknowledgeRisk: boolean | undefined): void {
@@ -57,10 +58,6 @@ const EVENT_FINDINGS: Partial<Record<SandboxEventType, Pick<Finding, 'code' | 's
     code: 'download_blocked', severity: 'medium', quality: 'high', title: 'Tried to download a file',
     reason: (n) => `The site started ${n} download(s). Downloads are blocked in the Sandbox.`,
   },
-  cross_domain_redirect: {
-    code: 'sandbox_cross_domain_redirect', severity: 'medium', quality: 'medium', title: 'Redirected to another site',
-    reason: (n, t) => `The page moved you to a different site ${n} time(s)${t}.`,
-  },
   permission_denied: {
     code: 'permission_requested', severity: 'low', quality: 'high', title: 'Requested device permissions',
     reason: (n) => `The site asked ${n} time(s) for access such as camera, microphone, location or notifications. These are always denied in the Sandbox.`,
@@ -79,12 +76,63 @@ const EVENT_FINDINGS: Partial<Record<SandboxEventType, Pick<Finding, 'code' | 's
   },
 };
 
+const registry = new EntityRegistry();
+
+/**
+ * Platforms ordinary sites pass through for sign-in, consent, video or payment. Landing on one
+ * isn't a sign of a scam by itself (their own checks, like Safe Browsing, cover abuse of them).
+ */
+const COMMON_PLATFORMS = [
+  'google.com', 'google.co.za', 'youtube.com', 'gstatic.com', 'facebook.com', 'instagram.com', 'apple.com', 'icloud.com',
+  'microsoft.com', 'microsoftonline.com', 'live.com', 'x.com', 'twitter.com', 'linkedin.com', 'tiktok.com', 'whatsapp.com',
+];
+
+const isTrusted = (host: string) =>
+  !!registry.ownerOf(host) || COMMON_PLATFORMS.some((d) => isSameOrSubdomain(host, d));
+
+/**
+ * Judges unprompted moves between sites by where the page ended up, not by how often it hopped.
+ * Busy shops bounce through sign-in, consent and analytics pages many times; what matters is being
+ * left on an unknown site you didn't choose.
+ */
+function redirectFinding(events: SandboxEvent[], startHost: string | undefined): Finding | null {
+  const startDomain = startHost ? registrableDomain(startHost) : null;
+  const moves = events.filter((e) => (e.type === 'cross_domain_redirect' || e.type === 'navigation') && e.target);
+  const away = moves.filter(
+    (e) => e.type === 'cross_domain_redirect' && registrableDomain(e.target!) !== startDomain && !isTrusted(e.target!),
+  );
+  if (away.length === 0) return null;
+
+  const domains = [...new Set(away.map((e) => registrableDomain(e.target!) ?? e.target!))];
+  const finalHost = moves.at(-1)!.target!;
+  const endedAway = away.at(-1) === moves.at(-1);
+  const list = domains.slice(0, 3).join(', ');
+  return finding({
+    code: 'sandbox_cross_domain_redirect',
+    source: 'sandbox',
+    kind: 'suspicious_indicator',
+    ...(endedAway
+      ? {
+          severity: 'medium', quality: 'medium', title: 'Sent you to another site',
+          reason: `Without you tapping anything, the page moved you to ${domains.length === 1 ? 'another site' : `${domains.length} other sites`} and left you on ${finalHost}.`,
+        }
+      : {
+          severity: 'low', quality: 'medium', title: 'Briefly passed through other sites',
+          reason: `The page passed through ${list} on its own before moving on. Common on large sites, so this alone isn't a warning.`,
+        }),
+    observedAt: away[0]!.at,
+    data: { count: away.length, sites: domains.length },
+  });
+}
+
 /** Aggregates raw session events into findings for the Sandbox report. */
-export function findingsFromEvents(events: SandboxEvent[]): Finding[] {
+export function findingsFromEvents(events: SandboxEvent[], startHost?: string): Finding[] {
   const grouped = new Map<SandboxEventType, SandboxEvent[]>();
   for (const e of events) grouped.set(e.type, [...(grouped.get(e.type) ?? []), e]);
 
   const out: Finding[] = [];
+  const redirect = redirectFinding(events, startHost);
+  if (redirect) out.push(redirect);
   for (const [type, list] of grouped) {
     const spec = EVENT_FINDINGS[type];
     if (!spec) continue;
