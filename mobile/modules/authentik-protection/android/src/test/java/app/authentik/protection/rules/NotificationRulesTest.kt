@@ -128,4 +128,56 @@ class NotificationRulesTest {
     assertFalse(everything.contains("4111"))
     assertFalse(everything.contains("123456"))
   }
+
+  @Test
+  fun `card delivery PIN shown to the courier in person is not a credential request`() {
+    val a = analyze(
+      "Your new bank card is on its way. To confirm your identity, please share your delivery PIN 4821 with the courier when they arrive.",
+    )
+    assertFalse("credential_request" in a.codes())
+    assertFalse(a.shouldWarn)
+  }
+
+  @Test
+  fun `ride PIN for the driver is not a credential request`() {
+    val a = analyze("Share your PIN 3390 with your driver to start the trip.", pkg = "com.example.rides")
+    assertFalse(a.shouldWarn)
+  }
+
+  @Test
+  fun `reading an OTP to a courier over the phone is still flagged`() {
+    val a = analyze("Our courier will call you. Read out the OTP 552190 to the driver over the phone.")
+    assertTrue("credential_request" in a.codes())
+    assertTrue(a.shouldWarn)
+  }
+
+  @Test
+  fun `giving the driver your card PIN is still flagged`() {
+    val a = analyze("Give the driver your card PIN to confirm the delivery.")
+    assertTrue("credential_request" in a.codes())
+  }
+
+  @Test
+  fun `unclaimed funds offer asking you to email is high risk`() {
+    val a = analyze(
+      "Good day, I have access to your unclaimed funds of R350 000 held in a dormant account. Email them at claims.office@example.com for more info.",
+    )
+    assertEquals(Verdict.HIGH_RISK, a.verdict)
+    assertTrue(a.codes().containsAll(setOf("money_offer", "money_offer_contact")))
+    assertEquals("Don't reply to this money offer", a.headline)
+  }
+
+  @Test
+  fun `inheritance with a release fee is high risk`() {
+    val a = analyze("You have been named the beneficiary of an inheritance. Pay the release fee of R1 500 to receive it.")
+    assertEquals(Verdict.HIGH_RISK, a.verdict)
+    assertTrue("money_offer_contact" in a.codes())
+  }
+
+  @Test
+  fun `a bank's new beneficiary alert is not a money offer`() {
+    val a = analyze("New beneficiary added to your profile: J Smith.", pkg = "com.example.bank")
+    assertFalse("money_offer" in a.codes())
+    assertFalse(a.shouldWarn)
+  }
 }

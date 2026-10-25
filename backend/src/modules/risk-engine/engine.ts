@@ -9,7 +9,7 @@ import {
 import { explain, type Subject } from './explain.js';
 
 /** Bump when rules change so stored reports say which rules produced them. */
-export const RULES_VERSION = '2026.10.2';
+export const RULES_VERSION = '2026.10.3';
 
 export interface AssessInput {
   subject: Subject;

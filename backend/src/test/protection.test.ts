@@ -135,6 +135,16 @@ describe('POST /v1/notifications/analyze', () => {
     expect(res.body.assessment.findings.filter((f: { source: string }) => f.source === 'notification')).toHaveLength(0);
   });
 
+  it('treats a money offer that asks you to make contact as high risk', async () => {
+    const { app } = harness();
+    const res = await request(app)
+      .post('/v1/notifications/analyze')
+      .set(as('u1'))
+      .send(notification({ findingCodes: ['money_offer', 'money_offer_contact'] }))
+      .expect(200);
+    expect(res.body.assessment.verdict).toBe('high_risk');
+  });
+
   it('turns a private-address link into a warning, not a blocked notification', async () => {
     const { app } = harness();
     const res = await request(app).post('/v1/notifications/analyze').set(as('u1')).send(notification({ linkHosts: ['10.0.0.5'] })).expect(200);

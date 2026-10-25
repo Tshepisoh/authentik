@@ -21,7 +21,7 @@ import app.authentik.protection.rules.Severity.MEDIUM
  */
 object NotificationRules {
   /** Bump when rules change. Stored on every warning. */
-  const val RULES_VERSION = "android-2026.10.2"
+  const val RULES_VERSION = "android-2026.10.3"
 
   private const val MAX_TEXT = 2000
 
@@ -46,6 +46,26 @@ object NotificationRules {
   // No "enter" or "use": genuine OTP texts say "Enter OTP … to approve".
   private val credentialVerb = Regex("""\b(?:share|send|give|reply|forward|confirm|provide|tell|read out|verify|update)\b""")
   private val negation = Regex("""\b(?:never|do not|don't|dont|not|won't|will not|no one|nobody)\b""")
+
+  // Card couriers and ride apps give you a code to show or read out in person ("share your PIN
+  // with the driver"). That isn't a request for a banking secret, unless it goes by message or
+  // call, or names a card, banking or app PIN.
+  private val handoverRecipient = Regex("""\b(?:driver|courier|rider|delivery (?:agent|person|partner|consultant))\b""")
+  private val remoteChannel = Regex("""\b(?:reply|whatsapp|e-?mail|call|phone|sms|link|click|website)\b|\bsend (?:it|this|the code)? ?(?:to|back)\b""")
+  private val bankingSecret = Regex(
+    """\b(?:card|bank|banking|atm|app|account) (?:pin|password)\b|\b(?:password|cvv|cvc|card number|card details|banking details|login details)\b""",
+  )
+
+  // Advance-fee scams: a stranger promises money, then asks you to get in touch or pay a fee first.
+  private val moneyOffer = Regex(
+    """\bunclaimed (?:funds?|money|benefits?|inheritance|assets?|pension|payout)\b|\binheritance\b|\bnext of kin\b|\bdormant (?:account|funds)\b|\bcompensation (?:fund|payment|payout)\b|\b(?:lottery|lotto|jackpot|sweepstakes?)\b|\byou(?:'ve| have)? (?:won|been awarded)\b|\b(?:you are|you're|you have been named) (?:the |a )?(?:beneficiary|heir)\b|\b(?:funds?|money|payout|grant|inheritance) (?:is |are |has been |have been )?(?:waiting|reserved|allocated|available) (?:for you|in your name)\b|\bclaim (?:your|the) (?:funds?|money|inheritance|payout|compensation|winnings)\b|\b(?:access to |release (?:of )?)your (?:funds?|money|inheritance|payout)\b""",
+  )
+  private val offPlatformContact = Regex(
+    """\b(?:e-?mail|whatsapp|contact|call|sms|text|reach) (?:me|us|him|her|them|our (?:agent|office|lawyer|attorney))\b|\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b|\bfor (?:more )?(?:info|information|details)\b""",
+  )
+  private val upfrontFee = Regex(
+    """\b(?:processing|release|transfer|admin(?:istration)?|clearance|legal|courier|insurance|activation|handling) (?:fee|charge)s?\b|\bpay (?:a |the )?(?:small )?(?:fee|charge)\b""",
+  )
 
   private val verifyAccount = Regex(
     """\b(?:verify|update|confirm|validate|reactivate|unlock)\b.{0,30}\b(?:account|details|identity|card|profile|information|info)\b""",
@@ -96,6 +116,20 @@ object NotificationRules {
         "Asks for your PIN, OTP, password or card details",
         "Your bank will never ask for these in a message.",
       )
+    }
+    if (moneyOffer.containsMatchIn(text)) {
+      findings += Finding(
+        "money_offer", SUSPICIOUS, MEDIUM, Q.MEDIUM,
+        "Offers money you weren't expecting",
+        "Unclaimed funds, inheritances and winnings offered by strangers are a classic advance-fee scam.",
+      )
+      if (offPlatformContact.containsMatchIn(text) || upfrontFee.containsMatchIn(text)) {
+        findings += Finding(
+          "money_offer_contact", SUSPICIOUS, HIGH, Q.HIGH,
+          "Promises money if you get in touch or pay first",
+          "Scammers promise a payout, then ask for fees or personal details before you \"receive\" it. Nothing is ever paid out.",
+        )
+      }
     }
     if (hasLink && verifyAccount.containsMatchIn(text)) {
       findings += Finding(
@@ -169,8 +203,14 @@ object NotificationRules {
     text.split(Regex("""[.!?\n]+""")).any { sentence ->
       credentialObject.containsMatchIn(sentence) &&
         credentialVerb.containsMatchIn(sentence) &&
-        !negation.containsMatchIn(sentence)
+        !negation.containsMatchIn(sentence) &&
+        !isInPersonHandover(sentence)
     }
+
+  private fun isInPersonHandover(sentence: String): Boolean =
+    handoverRecipient.containsMatchIn(sentence) &&
+      !remoteChannel.containsMatchIn(sentence) &&
+      !bankingSecret.containsMatchIn(sentence)
 
   private fun linkFindings(links: List<LinkHost>, text: String, intel: ThreatIntel): List<Finding> {
     val out = mutableListOf<Finding>()
@@ -240,6 +280,9 @@ object NotificationRules {
       "Check the delivery in the courier's official app or website."
     "refund_link" in codes -> "Be careful with this refund message" to
       "Real refunds don't need you to sign in through a link. Contact the company directly."
+    "money_offer_contact" in codes || "money_offer" in codes -> "Don't reply to this money offer" to
+      "Strangers don't hand out unclaimed funds, inheritances or winnings. Don't email, call or pay them. " +
+      "If you think money is owed to you, contact the organisation using details you find yourself."
     "prize_link" in codes -> "Be careful with this prize offer" to
       "Don't enter personal or banking details to claim it."
     "payment_claim" in codes -> "Check your banking app before you trust this" to PAYMENT_ACTION

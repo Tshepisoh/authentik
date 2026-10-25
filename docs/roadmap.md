@@ -36,7 +36,7 @@ Backend tests: `backend/src/test/protection.test.ts`. Kotlin: `ThreatIntelTest.k
 - 🟡 Second source: `THREAT_FEED_URLS` loads plain-text domain feeds on a timer (non-critical). Off by default: pick feeds and check their licences
 - ✅ Reputation cache (30 min per provider, host and path; failures never cached) and RDAP cache (1 day)
 - ✅ `GET /v1/threats/updates`: blocklist + feeds + brands, versioned, with deltas against the last 5 versions
-- ✅ `POST /v1/notifications/analyze`: phone's finding codes + link checks → one `notification` assessment. Codes and hostnames only, no text. `RULES_VERSION` 2026.10.2
+- ✅ `POST /v1/notifications/analyze`: phone's finding codes + link checks → one `notification` assessment. Codes and hostnames only, no text. `RULES_VERSION` 2026.10.3
 - 🟡 Phone downloads the threat list (`threat-sync.ts`, every 6 h while the app opens) into native storage (`ThreatListStore.kt`); the listener flags listed links offline and only clears links while the list is fresh. The store's Android code is untested (needs the SDK)
 - ✅ Downloaded brands replace the built-in seed in the Kotlin rules
 - 🟡 "Check links online" on warnings and in the sample checker

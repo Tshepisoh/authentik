@@ -73,6 +73,16 @@ export const NOTIFICATION_FINDINGS: Record<string, Definition> = {
     title: 'Offers a prize or reward through a link',
     reason: 'Unexpected prizes are a common way to get people onto scam pages.',
   },
+  money_offer: {
+    kind: 'suspicious_indicator', severity: 'medium', quality: 'medium',
+    title: 'Offers money you weren’t expecting',
+    reason: 'Unclaimed funds, inheritances and winnings offered by strangers are a classic advance-fee scam.',
+  },
+  money_offer_contact: {
+    kind: 'suspicious_indicator', severity: 'high', quality: 'high',
+    title: 'Promises money if you get in touch or pay first',
+    reason: 'Scammers promise a payout, then ask for fees or personal details before you “receive” it. Nothing is ever paid out.',
+  },
   shortened_link: {
     kind: 'suspicious_indicator', severity: 'low', quality: 'medium',
     title: 'Uses a link shortener',
