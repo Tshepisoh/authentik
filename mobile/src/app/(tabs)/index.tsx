@@ -4,7 +4,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { AuthentikProtection } from '@modules/authentik-protection';
 import { api } from '@/shared/api/client';
 import { useAsync } from '@/shared/lib/use-async';
-import { Button, ExtendedFab, Icon, ListItem, Notice, Section, Switch, Text, type IconName } from '@/shared/ui';
+import { Button, Icon, ListItem, Notice, Section, Switch, Text, type IconName } from '@/shared/ui';
 import { useTheme } from '@/shared/ui/theme';
 import { ReportRow } from '@/features/reports/report-row';
 import { useProtection } from '@/features/protection/use-protection';
@@ -57,7 +57,7 @@ export default function Home() {
   return (
     <View style={{ flex: 1, backgroundColor: c.surface }}>
       <ScrollView
-        contentContainerStyle={{ paddingHorizontal: t.space.lg, paddingTop: t.space.xs, paddingBottom: 112, gap: t.space.xl }}
+        contentContainerStyle={{ paddingHorizontal: t.space.lg, paddingTop: t.space.xs, paddingBottom: t.space.xxl, gap: t.space.xl }}
         refreshControl={<RefreshControl refreshing={recent.refreshing} onRefresh={() => { void recent.refresh(); protection.refresh(); web.refresh(); }} />}
       >
         <View accessibilityRole="summary" style={{ backgroundColor: hero.bg, borderRadius: t.radius.xxl, padding: 20, paddingBottom: t.space.lg, gap: t.space.lg }}>
@@ -142,7 +142,6 @@ export default function Home() {
         </Section>
       </ScrollView>
 
-      <ExtendedFab icon="add-link" label="Check a link" onPress={() => router.push('/scan')} style={{ position: 'absolute', right: t.space.lg, bottom: t.space.lg }} />
     </View>
   );
 }
