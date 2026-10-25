@@ -1,4 +1,4 @@
-﻿import {
+import {
   SEVERITY_RANK,
   type Assessment,
   type CheckRun,
@@ -22,14 +22,14 @@ export interface AssessInput {
  * The single place verdicts are decided. Rules are explicit and ordered so a
  * verdict can always be traced to the findings that caused it:
  *
- *  1. Any hard block                                   â†’ blocked
- *  2. A confirmed threat of high/critical severity     â†’ high_risk
+ *  1. Any hard block                                   → blocked
+ *  2. A confirmed threat of high/critical severity     → high_risk
  *  3. A critical indicator, a high-severity indicator
  *     backed by high-quality evidence, or two or more
- *     high-severity indicators                         â†’ high_risk
- *  4. Any high/medium indicator, or 2+ low indicators  â†’ suspicious
- *  5. A critical check didn't complete                 â†’ inconclusive
- *  6. Otherwise                                        â†’ no_obvious_warnings
+ *     high-severity indicators                         → high_risk
+ *  4. Any high/medium indicator, or 2+ low indicators  → suspicious
+ *  5. A critical check didn't complete                 → inconclusive
+ *  6. Otherwise                                        → no_obvious_warnings
  *
  * Missing evidence never becomes a safe verdict (rule 5), and reassurance
  * findings never cancel threats (they are not consulted above).
