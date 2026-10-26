@@ -27,7 +27,7 @@ on port 7860. `packages.txt` installs Chromium's system libraries.
 ## Settings
 | Name | Kind | Value |
 |---|---|---|
-| `WORKER_SECRET` | secret | Same value as `SANDBOX_WORKER_SECRET` on the API (32+ characters) |
+| `SANDBOX_WORKER_SECRET` | secret | Same value as on the API (32+ characters) |
 
 The Space is public, because a private one uses the `authorization` header for its own login.
 Only the worker's built code is here, and every call except `/health` needs the secret.

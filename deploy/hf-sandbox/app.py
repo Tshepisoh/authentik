@@ -16,10 +16,10 @@ APP = pathlib.Path(__file__).resolve().parent
 HOME = pathlib.Path.home()
 NODE_VERSION = "v24.21.0"
 NODE_BIN = HOME / f"node-{NODE_VERSION}-linux-x64" / "bin"
-SECRET = os.environ.get("WORKER_SECRET", "")
+SECRET = os.environ.get("SANDBOX_WORKER_SECRET", "")
 
 if len(SECRET) < 32:
-    sys.exit("Add the WORKER_SECRET secret (32+ characters) in the Space settings.")
+    sys.exit("Add the SANDBOX_WORKER_SECRET secret (32+ characters) in the Space settings.")
 
 env = {"PATH": f"{NODE_BIN}:/usr/bin:/bin", "HOME": str(HOME)}
 
