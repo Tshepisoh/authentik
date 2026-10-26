@@ -1,0 +1,39 @@
+# Render Blueprint: the API on a free web service. See deploy/render/README.md.
+services:
+  - type: web
+    name: authentik-api
+    runtime: docker
+    plan: free
+    region: frankfurt
+    dockerfilePath: ./deploy/render/Dockerfile
+    dockerContext: .
+    healthCheckPath: /health
+    buildFilter:
+      paths:
+        - backend/**
+        - packages/shared/**
+        - deploy/render/**
+        - package-lock.json
+    envVars:
+      # Secrets: Render asks for these when the Blueprint is created.
+      - key: FIREBASE_ADMIN_JSON
+        sync: false
+      - key: AUDIT_SALT
+        sync: false
+      - key: GOOGLE_SAFE_BROWSING_API_KEY
+        sync: false
+      - key: NGROK_AUTHTOKEN
+        sync: false
+      - key: NGROK_DOMAIN
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: THREAT_FEED_URLS
+        sync: false
+      # The sandbox worker on Hugging Face (deploy/hf-sandbox). Leave both empty to run without it.
+      - key: SANDBOX_WORKER_URL
+        sync: false
+      - key: SANDBOX_WORKER_SECRET
+        sync: false
+      - key: RDAP_ENABLED
+        value: "true"

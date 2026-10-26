@@ -70,7 +70,7 @@ export class HttpSandboxWorker implements SandboxWorker {
   }
 
   private headers() {
-    return { authorization: `Bearer ${this.secret}`, 'content-type': 'application/json' };
+    return { 'x-worker-secret': this.secret, 'content-type': 'application/json' };
   }
 
   async createSession(spec: WorkerSessionSpec): Promise<void> {
@@ -137,6 +137,6 @@ export class HttpSandboxWorker implements SandboxWorker {
   openStream(sessionId: string): WebSocket {
     const url = new URL(`/sessions/${encodeURIComponent(sessionId)}/stream`, this.baseUrl);
     url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
-    return new WebSocket(url, { headers: { authorization: `Bearer ${this.secret}` }, maxPayload: 4 * 1024 * 1024 });
+    return new WebSocket(url, { headers: { 'x-worker-secret': this.secret }, maxPayload: 4 * 1024 * 1024 });
   }
 }

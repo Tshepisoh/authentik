@@ -168,6 +168,14 @@ describe('worker control API', () => {
     expect((await fetch(`http://${base}/health`)).status).toBe(200);
   });
 
+  it('accepts the secret in x-worker-secret', async () => {
+    const { base } = await serve();
+    const send = (value: string) =>
+      fetch(`http://${base}/sessions`, { method: 'POST', headers: { 'x-worker-secret': value, 'content-type': 'application/json' }, body: '{}' });
+    expect((await send('wrong-secret-0123456789abcdef')).status).toBe(401);
+    expect((await send(secret)).status).toBe(400); // authorised; the empty body is then rejected
+  });
+
   it('re-validates the target URL itself', async () => {
     const { base, fb } = await serve();
     expect((await post(base, { ...spec, url: 'http://169.254.169.254/' })).status).toBe(422);

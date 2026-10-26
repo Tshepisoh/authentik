@@ -23,9 +23,12 @@ const STREAM_PATH =/^\/sessions\/([A-Za-z0-9_-]{8,64})\/stream$/;
  */
 export function createWorkerServer(manager: SessionManager, secret: string) {
   const authorized = (req: IncomingMessage) => {
-    const m = /^Bearer\s+(\S+)$/i.exec(req.headers.authorization ?? '');
-    if (!m || !secret) return false;
-    const a = Buffer.from(m[1]!);
+    // `x-worker-secret` is what the control plane sends: hosts such as Hugging Face Spaces
+    // treat a Bearer `authorization` header as their own login. Bearer still works.
+    const header = req.headers['x-worker-secret'];
+    const given = typeof header === 'string' ? header : /^Bearer\s+(\S+)$/i.exec(req.headers.authorization ?? '')?.[1];
+    if (!given || !secret) return false;
+    const a = Buffer.from(given);
     const b = Buffer.from(secret);
     return a.length === b.length && timingSafeEqual(a, b);
   };
