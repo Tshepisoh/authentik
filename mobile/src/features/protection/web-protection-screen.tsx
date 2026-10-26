@@ -39,7 +39,7 @@ function VpnDisclosure({ onAccept, busy }: { onAccept: () => void; busy: boolean
         </View>
         <View style={divider} />
         <View style={{ paddingVertical: t.space.md }}>
-          <FactRow icon="public" title="Where lookups go" body="On to your network’s usual DNS server, as they would without Authentik. If there isn’t one, to Cloudflare (1.1.1.1) or Google (8.8.8.8)." />
+          <FactRow icon="public" title="Where lookups go" body="On to your network’s usual DNS server, as they would without Authentik. If there isn’t one, or it doesn’t answer, to Cloudflare (1.1.1.1) or Google (8.8.8.8)." />
         </View>
         <View style={divider} />
         <View style={{ paddingVertical: t.space.md }}>

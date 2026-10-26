@@ -33,6 +33,7 @@ import java.io.FileOutputStream
 import java.io.IOException
 import java.net.DatagramPacket
 import java.net.DatagramSocket
+import java.net.Inet4Address
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.util.concurrent.ArrayBlockingQueue
@@ -46,7 +47,7 @@ import java.util.concurrent.TimeUnit
  * so there's nothing to decrypt and little to wake up for. Lookups for domains
  * on the threat list get NXDOMAIN; look-alike domains are answered normally and
  * raise a warning. Ordinary lookups are forwarded to the network's own DNS
- * servers and never recorded.
+ * servers (or 1.1.1.1 / 8.8.8.8 if none answer) and never recorded.
  *
  * What it can't see: Private DNS in strict mode, apps that use their own
  * DNS-over-HTTPS, cached answers and direct-IP connections.
@@ -61,6 +62,9 @@ class VpnProtectionService : VpnService() {
   @Volatile private var active = false
   @Volatile private var network: Network? = null
   @Volatile private var upstream: List<InetAddress> = emptyList()
+
+  // Tried first, so one dead server doesn't slow every lookup. Reset when the network changes.
+  @Volatile private var preferred: InetAddress? = null
 
   // Last time each host raised a notification, so one site doesn't flood the shade.
   private val lastNotified = ConcurrentHashMap<String, Long>()
@@ -144,7 +148,10 @@ class VpnProtectionService : VpnService() {
     tun = fd
     active = true
     VpnState.reset(running = true)
-    pool = ThreadPoolExecutor(2, 4, 30, TimeUnit.SECONDS, ArrayBlockingQueue(256), ThreadPoolExecutor.DiscardOldestPolicy())
+    // A page needs dozens of lookups at once. Core == max, because a ThreadPoolExecutor only grows
+    // past its core size when the queue is full, which left two threads serving every lookup.
+    pool = ThreadPoolExecutor(LOOKUP_THREADS, LOOKUP_THREADS, 30, TimeUnit.SECONDS, ArrayBlockingQueue(256), ThreadPoolExecutor.DiscardOldestPolicy())
+      .apply { allowCoreThreadTimeOut(true) }
     reader = Thread({ readLoop(fd) }, "authentik-dns").also { it.start() }
     VpnState.changed()
   }
@@ -205,30 +212,47 @@ class VpnProtectionService : VpnService() {
     }
   }
 
-  /** Sends the query to the real network's DNS servers and relays the answer. SERVFAIL if none answer. */
+  /** Sends the query upstream and relays the first valid answer. SERVFAIL if none answer. */
   private fun forward(d: Datagram, q: Question?, output: FileOutputStream) {
-    val servers = upstream.ifEmpty { FALLBACK_DNS }
     val id = Ipv4Udp.u16(d.payload, 0)
-    for (server in servers.take(2)) {
-      try {
-        DatagramSocket().use { s ->
-          protect(s)
-          network?.bindSocket(s)
-          s.soTimeout = 2500
-          s.send(DatagramPacket(d.payload, d.payload.size, InetSocketAddress(server, 53)))
-          val resp = ByteArray(4096)
-          val packet = DatagramPacket(resp, resp.size)
-          s.receive(packet)
-          if (packet.length < 12 || Ipv4Udp.u16(resp, 0) != id) return@use
-          write(output, Ipv4Udp.build(d.dst, d.src, d.dstPort, d.srcPort, resp.copyOf(packet.length)))
-          return
-        }
-      } catch (_: IOException) {
-        // Try the next server.
+    for (server in candidates()) {
+      val resp = try {
+        query(server, d.payload)
+      } catch (_: Exception) {
+        null // Unreachable, timed out, or the network went away: try the next server.
       }
+      if (resp == null || resp.size < 12 || Ipv4Udp.u16(resp, 0) != id) continue
+      preferred = server
+      write(output, Ipv4Udp.build(d.dst, d.src, d.dstPort, d.srcPort, resp))
+      return
     }
     if (q != null) write(output, Ipv4Udp.build(d.dst, d.src, d.dstPort, d.srcPort, Dns.reply(d.payload, q, Dns.SERVFAIL)))
   }
+
+  /**
+   * The server that answered last, then the network's own (IPv4 first: an IPv6 server the
+   * network can't reach would otherwise stall every lookup), then the public fallbacks.
+   */
+  private fun candidates(): List<InetAddress> {
+    val own = upstream.sortedBy { if (it is Inet4Address) 0 else 1 }
+    return (listOfNotNull(preferred) + own + FALLBACK_DNS).distinct().take(MAX_ATTEMPTS)
+  }
+
+  private fun query(server: InetAddress, payload: ByteArray): ByteArray =
+    DatagramSocket().use { s ->
+      protect(s)
+      // Authentik is outside its own VPN, so an unbound socket still uses the real network.
+      try {
+        network?.bindSocket(s)
+      } catch (_: Exception) {
+      }
+      s.soTimeout = UPSTREAM_TIMEOUT_MS
+      s.send(DatagramPacket(payload, payload.size, InetSocketAddress(server, 53)))
+      val buf = ByteArray(4096)
+      val packet = DatagramPacket(buf, buf.size)
+      s.receive(packet)
+      buf.copyOf(packet.length)
+    }
 
   private fun write(output: FileOutputStream, packet: ByteArray) {
     try {
@@ -272,6 +296,7 @@ class VpnProtectionService : VpnService() {
         if (n != network) return
         network = null
         upstream = emptyList()
+        preferred = null
         VpnState.upstreamServers = 0
         setUnderlyingNetworks(null)
         VpnState.changed()
@@ -282,6 +307,7 @@ class VpnProtectionService : VpnService() {
   }
 
   private fun applyLinkProperties(lp: LinkProperties) {
+    if (lp.dnsServers != upstream) preferred = null
     upstream = lp.dnsServers
     VpnState.upstreamServers = lp.dnsServers.size
     // Strict Private DNS sends lookups straight to that provider over TLS, past this VPN.
@@ -359,8 +385,11 @@ class VpnProtectionService : VpnService() {
     private const val BLOCK_NOTIFY_MS = 10 * 60 * 1000L
     private const val WARN_NOTIFY_MS = 24 * 60 * 60 * 1000L
 
-    // Used only when the network reports no DNS servers of its own.
+    // Used only when the network has no DNS servers of its own, or none of them answer.
     private val FALLBACK_DNS: List<InetAddress> = listOf("1.1.1.1", "8.8.8.8").map { InetAddress.getByName(it) }
+    private const val LOOKUP_THREADS = 16
+    private const val UPSTREAM_TIMEOUT_MS = 2000
+    private const val MAX_ATTEMPTS = 4
 
     fun start(context: Context) {
       ContextCompat.startForegroundService(context, Intent(context, VpnProtectionService::class.java).setAction(ACTION_START))
